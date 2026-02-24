@@ -27,38 +27,56 @@ class Board:
     def set(self, x, y, piece):
         """Sets a specific coordinate on the board to the specified object"""
         self.board[y][x] = piece
-        
-    # game logic
-    def move(self, x1: int, y1: int, x2: int, y2: int) -> bool:
-        """If valid, moves a piece to a given position. For forceful movements, use 'set(x,y,piece)'"""
+    
+    # board-piece interaction
+    def move(self, x1: int, y1: int, x2: int, y2: int, force = False) -> bool:
+        """If valid, moves a piece to a given position.. Will also attempt to promote pieces that are at the border'"""
         pass
     
     def get_legal(self, x, y):
         """Returns a list of legal moves from a given position"""
         pass
     
+    def promote(self, x, y) -> bool:
+        if self.is_occupied(x,y):
+            self.get(x,y).promote()
+            return True
+        return False
+    
+    # game logic
     def get_all_legal(self, color):
         """Returns a list of list legal moves for ALL pieces of this color"""
         pass
     
+    #TODO: Update it so if the enemy has no pieces OR legal moves, you win
     def has_won(self, color) -> bool:
-        """Returns True if the color team has won"""
-        pass
+        """Returns whether a team has won the game or not"""
+        if color == Piece.BLACK and self.get_num_pieces(Piece.WHITE) == 0:
+            return True
+        elif color == Piece.WHITE and self.get_num_pieces(Piece.BLACK) == 0:
+            return True
+        else:
+            return False
+        
+    def get_all_pieces(self):
+        """Returns a list of every piece currently on the board"""
+        return self.get_all_pieces_of_team(Piece.WHITE) + self.get_all_pieces_of_team(Piece.BLACK)
     
-    def get_all_pieces(self, color):
-        """Returns a list of all alive pieces of this color"""
-        pass
-    
-    def get_num_pieces(self, color) -> int:
-        """Returns the number of alive pieces of this color"""
-        num = 0
+    def get_all_pieces_of_team(self, color):
+        """Returns a list of all pieces belonging to a specific color"""
+        pieces = []
         
         for y in range(0,8):
             for x in range(0,8):
                 if self.is_occupied(x,y):
                     occupant = self.get(x,y)
-                    if occupant is Piece and occupant.color == color:
-                        num += 1
+                    if isinstance(occupant, Piece) and occupant.color == color:
+                        pieces.append(occupant)
+        return pieces
+    
+    def get_num_pieces(self, color) -> int:
+        """Returns the number of alive pieces of this color"""
+        return len(self.get_all_pieces_of_team(color))
 
     # helpers
     def is_unplayable_space(self, x, y) -> bool:
