@@ -1,5 +1,11 @@
 from game.piece import Piece
 
+## Board is the "sanity check" of the project. The robot will compare it (using CV) 
+##
+##
+##
+##
+
 class Board:
     def __init__(self):
         self.board = [[None for _ in range(8)] for _ in range(8)]
