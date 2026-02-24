@@ -1,4 +1,7 @@
 class Piece:
+    WHITE = "W"
+    BLACK = "B"
+    
     def __init__(self, color, king=False):
         self.color = color
         self.king = king
