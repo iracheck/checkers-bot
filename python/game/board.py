@@ -33,20 +33,30 @@ class Board:
         """If valid, moves a piece to a given position.. Will also attempt to promote pieces that are at the border'"""
         pass
     
-    def get_legal(self, x, y):
-        """Returns a list of legal moves from a given position"""
-        pass
-    
     def promote(self, x, y) -> bool:
         if self.is_occupied(x,y):
             self.get(x,y).promote()
             return True
         return False
     
-    # game logic
-    def get_all_legal(self, color):
-        """Returns a list of list legal moves for ALL pieces of this color"""
+    def get_legal(self, x, y) -> list[tuple[int, int]]:
+        """Returns a list of legal moves from a given position"""
         pass
+    
+    def get_every_legal(self, color) -> list[list[tuple[int, int]]]:
+        """Returns every legal position a color can make"""
+        pieces = self.get_all_pieces_of_team(color)
+        print(pieces)
+        print(pieces[0])
+        legal_moves = [[] for piece in pieces]
+        print(legal_moves)
+        
+        for piece in range(0, len(pieces)):
+            legal_moves[piece] = self.get_legal(pieces[piece][0], pieces[piece][1])
+        
+        return legal_moves
+    
+    # game logic
     
     #TODO: Update it so if the enemy has no pieces OR legal moves, you win
     def has_won(self, color) -> bool:
@@ -62,7 +72,7 @@ class Board:
         """Returns a list of every piece currently on the board"""
         return self.get_all_pieces_of_team(Piece.WHITE) + self.get_all_pieces_of_team(Piece.BLACK)
     
-    def get_all_pieces_of_team(self, color):
+    def get_all_pieces_of_team(self, color) -> list[tuple[int, int]]:
         """Returns a list of all pieces belonging to a specific color"""
         pieces = []
         
@@ -71,7 +81,7 @@ class Board:
                 if self.is_occupied(x,y):
                     occupant = self.get(x,y)
                     if isinstance(occupant, Piece) and occupant.color == color:
-                        pieces.append(occupant)
+                        pieces.append((x,y))
         return pieces
     
     def get_num_pieces(self, color) -> int:
