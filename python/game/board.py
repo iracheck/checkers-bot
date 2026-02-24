@@ -37,9 +37,15 @@ class Board:
     # board-piece interaction
     def move(self, x1: int, y1: int, x2: int, y2: int, force = False) -> bool:
         """If valid, moves a piece to a given position.. Will also attempt to promote pieces that are at the border'"""
-        pass
+        
+        # checks if the move is valid (unless you 'force')
+        if force or (x2,y2) in self.get_legal(x1,y1): # move valid *or* forced move
+            return True
+        else: # move not valid
+            return False
     
     def promote(self, x, y) -> bool:
+        """Promotes the piece on a given x,y coordinate to a king"""
         if self.is_occupied(x,y):
             self.get(x,y).promote()
             return True
@@ -47,8 +53,8 @@ class Board:
     
     def get_legal(self, x, y) -> list[tuple[int, int]]:
         """Returns a list of legal moves from a given position"""
-        pass
-    
+        
+         
     def get_every_legal(self, color) -> list[list[tuple[int, int]]]:
         """Returns every legal position a color can make"""
         pieces = self.get_all_pieces_of_team(color)
