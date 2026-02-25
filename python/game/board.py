@@ -57,39 +57,64 @@ class Board:
             return True
         return False
     
-    def get_legal(self, x, y, post_jump = False) -> list[tuple[int, int]]:
+    def get_legal(self, x, y, chained_piece = None, jumped = None) -> list[tuple[int, int]]:
         """Returns a list of legal moves from a given position"""
-        legal_moves = []
+        legal_moves = [] # tuple(int, int)
 
-        # index 0 gives the color in which all pieces have access to those moves, regardless of king status
-        move_options = [[Piece.BLACK, (1,1), (-1, 1)], [Piece.WHITE, (1,-1), (-1,-1)]] # this could be a dictionary, but its okay in its current form
-        piece = self.get(x,y)
-
-        if piece is None:
-            print("Tried to find legal moves for a piece, but there is no piece on that tile! Tile: (" + x + "," + y + ")")
-            return []
-
-        for option in move_options:
-            if piece.is_king or (move_options.index(option) == 0) or (move_options.index(option) == 1):
-                for move in option:
-                    if option.index(move) == 0:
-                        continue
-
-                    tempX = x + move[0]
-                    tempY = y + move[1]
-                    space = self.get(tempX, tempY)
-
-                    if space is not None:
-                        if space.color == piece.color:
-                            continue
-
-
-                    if self.is_unplayable_space(tempX, tempY):
-                        continue
-
-                    legal_moves.append((tempX, tempY))
-        return legal_moves
+        move_options = {
+            Piece.BLACK: [(1,1), (-1,1)],
+            Piece.WHITE: [(1,-1), (-1,-1)]
+        }
         
+        piece = self.get(x,y)
+        if piece is None:
+            piece = chained_piece
+
+            if piece is None:
+                print("Tried to find legal moves for a piece, but there is no piece on that tile! Tile: (" + str(x) + "," + str(y) + ")")
+                return []
+
+        if piece.is_king:
+            dirs = move_options[Piece.BLACK] + move_options[Piece.WHITE]
+        else:
+            dirs = move_options[piece.color]
+
+        for move in dirs:
+            tested_x = x + move[0]
+            tested_y = y + move[1]
+
+            if self.is_unplayable_space(tested_x, tested_y):
+                continue
+        
+            space = self.get(tested_x, tested_y)
+
+            if jumped is None:
+                jumped = []
+
+            if space is not None and (tested_x, tested_y) not in jumped:
+                if space.color == piece.color:
+                    continue
+
+                jumped = jumped + [(tested_x, tested_y)]
+
+                tested_x += move[0]
+                tested_y += move[1]
+            
+                if not self.is_unplayable_space(tested_x, tested_y) and self.get(tested_x, tested_y) == None:
+                    chain = [(tested_x, tested_y)]
+
+                    # recursive --\/--
+                    post_jump_moves = self.get_legal(tested_x, tested_y, piece, jumped)
+                    for move in post_jump_moves:
+                        chain.append(move)
+                    
+                    legal_moves.append(chain)
+                continue
+
+            legal_moves.append([(tested_x, tested_y)])
+        return legal_moves
+    
+    def flatten(list: list)
          
     def get_every_legal(self, color) -> list[list[tuple[int, int]]]:
         """Returns every legal position a color can make"""
