@@ -21,7 +21,7 @@ class Board:
                 if not self.is_unplayable_space(x,y):
                     self.set(x,y, Piece(Piece.WHITE))
     
-    # grid interactions
+    # low-level grid interactions
     def get(self, x: int, y: int) -> Piece | None:
         """Returns the object currently occupying a coordinate on the board, or 'None' if it is empty"""
         if self.is_unplayable_space(x,y):
@@ -41,6 +41,11 @@ class Board:
             moved_piece = self.get(x1, y1)
             self.set(x2,y2, moved_piece)
             self.set(x1,y1, None)
+
+            # if at the end of board, promote
+            if (moved_piece.color == Piece.BLACK and y2 == 7) or (moved_piece.color == Piece.WHITE and y2 == 0):
+                moved_piece.promote()
+
             return True
         else: # move not valid
             return False
@@ -57,11 +62,11 @@ class Board:
         legal_moves = []
 
         # index 0 gives the color in which all pieces have access to those moves, regardless of king status
-        move_options = [[Piece.BLACK, (1,1), (-1, 1)], [Piece.WHITE, (1,-1), (-1,-1)]]
+        move_options = [[Piece.BLACK, (1,1), (-1, 1)], [Piece.WHITE, (1,-1), (-1,-1)]] # this could be a dictionary, but its okay in its current form
         piece = self.get(x,y)
 
         if piece is None:
-            print("Tried to find legal moves for a piece, but there is no piece on that tile!")
+            print("Tried to find legal moves for a piece, but there is no piece on that tile! Tile: (" + x + "," + y + ")")
             return []
 
         for option in move_options:
@@ -75,7 +80,9 @@ class Board:
                     space = self.get(tempX, tempY)
 
                     if space is not None:
-                        continue
+                        if space.color == piece.color:
+                            continue
+
 
                     if self.is_unplayable_space(tempX, tempY):
                         continue
@@ -129,7 +136,7 @@ class Board:
     # helpers
     def is_unplayable_space(self, x: int, y: int) -> bool:
         """Returns True if a space is an unused, out of bounds or otherwise unplayable"""
-        if x > 7 or x < 0 or y > 7 or y < 0:
+        if self.is_out_of_bounds(x,y):
             return True
         elif (x + y) % 2 == 1:
             return False
@@ -138,7 +145,10 @@ class Board:
         
     def is_occupied(self, x, y) -> bool:
         """Returns if a space is occupied"""
-        return self.board[y][x] != None
+        return self.get(x,y) != None
+    
+    def is_out_of_bounds(self,x,y) -> bool:
+        return x > 7 or x < 0 or y > 7 or y < 0
     
     
     # overrides    
