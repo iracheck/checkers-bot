@@ -37,7 +37,7 @@ class Board:
         """If valid, moves a piece to a given position.. Will also attempt to promote pieces that are at the border'"""
         
         # checks if the move is valid (unless you 'force')
-        if force or self.get_legal(x1,y1): # move valid *or* forced move 
+        if force or (x2,y2) in self.get_legal(x1,y1): # move valid *or* forced move 
             moved_piece = self.get(x1, y1)
             self.set(x2,y2, moved_piece)
             self.set(x1,y1, None)
@@ -94,27 +94,26 @@ class Board:
             if space is not None and (tested_x, tested_y) not in jumped:
                 if space.color == piece.color:
                     continue
-
-                jumped = jumped + [(tested_x, tested_y)]
-
-                tested_x += move[0]
-                tested_y += move[1]
-            
-                if not self.is_unplayable_space(tested_x, tested_y) and self.get(tested_x, tested_y) == None:
-                    chain = [(tested_x, tested_y)]
-
-                    # recursive --\/--
-                    post_jump_moves = self.get_legal(tested_x, tested_y, piece, jumped)
-                    for move in post_jump_moves:
-                        chain.append(move)
-                    
-                    legal_moves.append(chain)
                 continue
 
-            legal_moves.append([(tested_x, tested_y)])
+            legal_moves.append((tested_x, tested_y))
+
         return legal_moves
     
-    def flatten(list: list)
+    def filter_forced_jumps(self, jumps: list[tuple[int,int]]):
+        valid_jumps = []
+        non_jumps = []
+        
+        for jump in jumps:
+            if len(jump) == 1:
+                non_jumps.append(jump)
+            else:
+                valid_jumps.append(jump)
+        
+        if len(valid_jumps) > 0:
+            return valid_jumps
+        return non_jumps
+
          
     def get_every_legal(self, color) -> list[list[tuple[int, int]]]:
         """Returns every legal position a color can make"""
@@ -174,7 +173,6 @@ class Board:
     
     def is_out_of_bounds(self,x,y) -> bool:
         return x > 7 or x < 0 or y > 7 or y < 0
-    
     
     # overrides    
     def __str__(self):
