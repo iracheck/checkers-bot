@@ -41,7 +41,7 @@ checkers-bot/
 │   ├── game/               # Board, pieces, game logic, AI
 │   ├── computer_vision/    # OpenCV board detection
 │   ├── interface/          # Serial communication with ESP32
-│   ├── data_structures/    # Move sequences and supporting structures
+│   ├── data_structures/    # Move sequences and other supporting structures
 │   └── main.py             # Entry point
 └── tests/                  # Unit tests
 ```
