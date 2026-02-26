@@ -29,19 +29,28 @@ class Board:
             return None
         return self.board[y][x]
     
-    def set(self, x: int, y: int, piece: Piece):
-        """Sets a specific coordinate on the board to the specified object"""
+    def set(self, x: int, y: int, piece: Piece, force = False):
+        """Sets a specific coordinate on the board to the specified object. Use force to ignore invariants."""
         self.board[y][x] = piece
+
+        if self.is_unplayable_space(x,y):
+            raise ValueError("Tried to place something in an unplayable space at " + str(x) + str(y))
     
     # board-piece interaction
     def move(self, x1: int, y1: int, x2: int, y2: int, force = False) -> bool:
         """If valid, moves a piece to a given position. Automatically promotes any pieces that are at the opposing end of the board."""
         
         moved_piece = self.get(x1,y1)
+        legal_moves = self.get_legal(x1,y1)
 
-        for move in self.get_legal(x1,y1):
+        valid = False
+        for move in legal_moves:
             if (x2,y2) in move.path:
                 killed_pieces = move.kills
+                valid = True
+
+        if not (valid or force):
+            return False
 
         # move to designated position
         self.set(x1,y1,None)
@@ -134,7 +143,8 @@ class Board:
             
         return self.filter_forced_jumps(legal_moves)
     
-    def filter_forced_jumps(self, jumps: list[tuple[int,int]]):
+    def filter_forced_jumps(self, jumps: list[Move]) -> list[Move]:
+        """If there are killing jumps to be made, filter out any non-applicable jumps"""
         kill_jumps = []
 
         for jump in jumps:
@@ -146,7 +156,7 @@ class Board:
         return jumps
 
          
-    def get_every_legal(self, color) -> list[list[tuple[int, int]]]:
+    def get_every_legal(self, color) -> list[Move]:
         """Returns every legal position a color can make"""
         pieces = self.get_all_pieces_of_team(color)
         legal_moves = [[] for piece in pieces]
@@ -158,12 +168,11 @@ class Board:
     
     # game logic
     
-    #TODO: Update it so if the enemy has no pieces OR legal moves, you win
     def has_won(self, color) -> bool:
         """Returns whether a team has won the game or not"""
-        if color == Piece.BLACK and self.get_num_pieces(Piece.WHITE) == 0:
+        if color == Piece.BLACK and (self.get_num_pieces(Piece.WHITE) or len(self.self.get_every_legal(Piece.WHITE))) == 0:
             return True
-        elif color == Piece.WHITE and self.get_num_pieces(Piece.BLACK) == 0:
+        elif color == Piece.WHITE and (self.get_num_pieces(Piece.BLACK) or len(self.self.get_every_legal(Piece.BLACK))) == 0:
             return True
         else:
             return False
@@ -199,10 +208,11 @@ class Board:
             return True
         
     def is_occupied(self, x, y) -> bool:
-        """Returns if a space is occupied"""
+        """Returns True if a space is occupied"""
         return self.get(x,y) != None
     
     def is_out_of_bounds(self,x,y) -> bool:
+        "Returns True if a space is off the board"
         return x > 7 or x < 0 or y > 7 or y < 0
     
     # overrides    
