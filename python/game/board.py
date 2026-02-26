@@ -37,15 +37,23 @@ class Board:
     def move(self, x1: int, y1: int, x2: int, y2: int, force = False) -> bool:
         """If valid, moves a piece to a given position. Automatically promotes any pieces that are at the opposing end of the board."""
         
-        # checks if the move is valid (unless you 'force')
-        if force or any(move.path[-1] == (x1, y1) for move in self.get_legal(x1,y1)): # move valid *or* forced move 
-            moved_piece = self.get(x1, y1)
-            self.set(x2,y2, moved_piece)
-            self.set(x1,y1, None)
+        moved_piece = self.get(x1,y1)
 
-            # if at the end of board, promote
-            if (moved_piece.color == Piece.BLACK and y2 == 7) or (moved_piece.color == Piece.WHITE and y2 == 0):
-                moved_piece.promote()
+        for move in self.get_legal(x1,y1):
+            if (x2,y2) in move.path:
+                killed_pieces = move.kills
+
+        # move to designated position
+        self.set(x1,y1,None)
+        self.set(x2,y2,moved_piece)
+
+        # kill all pieces that should be killed
+        for piece in killed_pieces:
+            self.set(piece[0], piece[1], None)
+
+        # if at the end of board, promote
+        if (moved_piece.color == Piece.BLACK and y2 == 7) or (moved_piece.color == Piece.WHITE and y2 == 0):
+            moved_piece.promote()
 
             return True
         else: # move not valid
@@ -58,7 +66,7 @@ class Board:
             return True
         return False
     
-    def get_legal(self, x, y, chained_piece = None, jumped = None) -> list[tuple[int, int]]:
+    def get_legal(self, x, y, chained_piece = None, jumped = None) -> list[Move]:
         """Returns a list of legal moves from a given position"""
         legal_moves = [] # tuple(int, int)
 
@@ -124,21 +132,18 @@ class Board:
             else:
                 legal_moves.append(Move([(tested_x, tested_y)]))
             
-        return legal_moves
+        return self.filter_forced_jumps(legal_moves)
     
     def filter_forced_jumps(self, jumps: list[tuple[int,int]]):
-        valid_jumps = []
-        non_jumps = []
-        
+        kill_jumps = []
+
         for jump in jumps:
-            if len(jump) == 1:
-                non_jumps.append(jump)
-            else:
-                valid_jumps.append(jump)
-        
-        if len(valid_jumps) > 0:
-            return valid_jumps
-        return non_jumps
+            if len(jump.kills) > 0:
+                kill_jumps.append(jump)
+
+        if len(kill_jumps) > 0:
+            return kill_jumps
+        return jumps
 
          
     def get_every_legal(self, color) -> list[list[tuple[int, int]]]:
