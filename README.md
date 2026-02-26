@@ -35,7 +35,9 @@ A physical checkers-playing robot built by a team of engineers. The robot uses c
 
 ```
 checkers-bot/
-├── arduino/interface/      # ESP32 firmware (C/C++)
+├── esp32/                  # ESP32 firmware 
+│   ├── interface/          # Serial communication with Python brain
+│   ├── control/            # Arm control firmware
 ├── docs/                   # Documentation and serial protocol spec
 ├── python/
 │   ├── game/               # Board, pieces, game logic, AI
