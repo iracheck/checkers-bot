@@ -38,7 +38,12 @@ class Board:
     
     # board-piece interaction
     def move(self, x1: int, y1: int, x2: int, y2: int, force = False) -> bool:
-        """If valid, moves a piece to a given position. Automatically promotes any pieces that are at the opposing end of the board."""
+        """If valid, moves a piece to a given position. Automatically promotes any pieces that are at the opposing end of the board.
+        
+        Be aware that this function does not care about the intermediate nodes-- just the final node. 
+        This has no effect on a physical checkers board, but it does mean that during terminal testing, the player cannot choose a specific path. 
+        This has no effect on the AI, as the AI weighs each Move possibility internally.
+        """
         
         moved_piece = self.get(x1,y1)
         legal_moves = self.get_legal(x1,y1)
@@ -77,7 +82,7 @@ class Board:
         return False
     
     def get_legal(self, x, y, chained_piece = None, jumped = None) -> list[Move]:
-        """Returns a list of legal moves from a given position"""
+        """Returns a list of legal moves from a given position. If chained_piece is not None, it bypasses the requirement of a piece being on a given spot. If jumped is not None, treats those pieces as already jumped (for the purposes of checking for chained jumps)"""
         legal_moves = [] # tuple(int, int)
 
         move_options = {
@@ -118,6 +123,7 @@ class Board:
                 tested_x += dir[0]
                 tested_y += dir[1]
 
+                # pretend as if the jumped piece is already dead, so that we can check for chained jumps without modifying the board state
                 if (kill_x, kill_y) in jumped:
                     continue
                 
@@ -126,22 +132,23 @@ class Board:
                 
                 next_moves = self.get_legal(tested_x, tested_y, piece, jumped + [(kill_x, kill_y)])
                 
+                # if there are more jumps to be made, add them as chained moves. Otherwise, add this move as the final move in the set move.
                 if next_moves:
                     for next_move in next_moves:
-                        chained = Move()
+                        chained = Move(origin=(x,y))
                         chained.path = [(tested_x, tested_y)] + next_move.path
                         chained.kills = [(kill_x, kill_y)] + next_move.kills
                         legal_moves.append(chained)
                 else:
-                    move = Move()
+                    move = Move(origin=(x,y))
                     move.path = [(tested_x, tested_y)]
                     move.kills = [(kill_x, kill_y)]
                     legal_moves.append(move)
                 
                 continue
             else:
-                legal_moves.append(Move([(tested_x, tested_y)]))
-            
+                legal_moves.append(Move([(tested_x, tested_y)], origin=(x,y)))
+        
         return self.filter_forced_jumps(legal_moves)
     
     def filter_forced_jumps(self, jumps: list[Move]) -> list[Move]:

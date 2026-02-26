@@ -10,3 +10,4 @@ class Move:
     """
     path: list[tuple[int,int]] = field(default_factory=list)
     kills: list[tuple[int,int]] = field(default_factory=list)
+    origin: tuple[int,int] = (0,0)

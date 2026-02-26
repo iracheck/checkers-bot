@@ -23,7 +23,7 @@ A physical checkers-playing robot built by a team of engineers. The robot uses c
 | Game Logic & AI | Python |
 | Computer Vision | Python, OpenCV |
 | Serial Communication | Python (pyserial) |
-| Microcontroller | ESP32 (C/C++) |
+| Microcontroller | ESP32 (C) |
 | Mechanical System | Custom robotic arm |
 | Camera | TBA |
 | Motors | TBA |
@@ -39,6 +39,7 @@ checkers-bot/
 │   ├── interface/          # Serial communication with Python brain
 │   ├── control/            # Arm control firmware
 ├── docs/                   # Documentation and serial protocol spec
+├── hardware/               # Design files, etc.
 ├── python/
 │   ├── game/               # Board, pieces, game logic, AI
 │   ├── computer_vision/    # OpenCV board detection

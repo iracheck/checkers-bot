@@ -1,7 +1,7 @@
 from abc import ABC, abstractmethod
 
-from game.piece import Piece
 from game.move import Move
+from game.board import Board
 
 class Player(ABC):
 
@@ -11,5 +11,5 @@ class Player(ABC):
         self.color = color
 
     @abstractmethod
-    def get_move(self) -> Move:
+    def get_move(self, board: Board) -> Move:
         pass
