@@ -31,10 +31,10 @@ class Board:
     
     def set(self, x: int, y: int, piece: Piece, force = False):
         """Sets a specific coordinate on the board to the specified object. Use force to ignore invariants."""
-        self.board[y][x] = piece
-
         if self.is_unplayable_space(x,y):
             raise ValueError("Tried to place something in an unplayable space at " + str(x) + str(y))
+        
+        self.board[y][x] = piece
     
     # board-piece interaction
     def move(self, x1: int, y1: int, x2: int, y2: int, force = False) -> bool:
@@ -44,6 +44,7 @@ class Board:
         legal_moves = self.get_legal(x1,y1)
 
         valid = False
+        killed_pieces = []
         for move in legal_moves:
             if (x2,y2) in move.path:
                 killed_pieces = move.kills
@@ -170,9 +171,9 @@ class Board:
     
     def has_won(self, color) -> bool:
         """Returns whether a team has won the game or not"""
-        if color == Piece.BLACK and (self.get_num_pieces(Piece.WHITE) or len(self.self.get_every_legal(Piece.WHITE))) == 0:
+        if color == Piece.BLACK and (self.get_num_pieces(Piece.WHITE) or len(self.get_every_legal(Piece.WHITE))) == 0:
             return True
-        elif color == Piece.WHITE and (self.get_num_pieces(Piece.BLACK) or len(self.self.get_every_legal(Piece.BLACK))) == 0:
+        elif color == Piece.WHITE and (self.get_num_pieces(Piece.BLACK) or len(self.get_every_legal(Piece.BLACK))) == 0:
             return True
         else:
             return False
