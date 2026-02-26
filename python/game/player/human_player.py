@@ -6,37 +6,55 @@ class HumanPlayer(Player):
     def __init__(self, color="W"):
         super().__init__(color=color)
 
-    def get_move(self, board: Board):
+    def get_move(self, board: Board) -> Move:
         invalid = True
+        valid_moves = board.get_every_legal(self.color)
+
         print("\n"*100)
 
-        # Print the current state of the board at the start of the players turn, so that they can make an informed decision about their move
         print(board)
+
+        self.display_valid_moves(valid_moves)
+        print(valid_moves)
+
 
         # Loop until the player inputs something valid
         while (invalid):
-            move_str = input("YOUR TURN:\nOptions:\na) Move (Usage: 'move 1 2 2 3')\nb) List Legal Moves (Usage: 'list')\nInput: ")
-            if move_str.strip() == "list":
-                print("Legal Moves:")
-                for move in board.get_every_legal(self.color):
-                    if len(move) > 0:
-                        print(move)
-            elif move_str.startswith("move"):
-                move_str = move_str[4:].strip()
-                move_str = move_str.split(" ")
-
-                for i in range(len(move_str)):
-                    move_str[i] = int(move_str[i])
-
-                x1 = move_str[0]
-                y1 = move_str[1]
-                x2 = move_str[2]
-                y2 = move_str[3]
-                
-                if (x2,y2) in any(i.path in board.get_legal(x1,y1) where boa):
-                    board.move(x1,y1,x2,y2)
-                    invalid = False
-                else:
-                    print("[error] For one reason or another, that move was invalid. Try again.")
+            move_str = input("YOUR TURN:\nOptions:\na) Move (Usage: 'move 1 2 option_id')\n")
+            move_str = move_str.split(" ")
+            if len(move_str) != 4:
+                print("Invalid input. Please try again.")
+                continue
             else:
-                print("[error] Invalid input, please try again.")
+                command, x, y, option_id = move_str
+                if command != "move":
+                    print("Invalid command. Please try again.")
+                    continue
+                else:
+                    try:
+                        x = int(x)
+                        y = int(y)
+                        option_id = int(option_id)
+                    except ValueError:
+                        print("Invalid input. One of your inputs for x, y, or option_id is not an integer. Try again.")
+                        continue
+                    
+                    if (x,y) not in valid_moves.keys():
+                        print("Invalid piece. Please try again.")
+                        continue
+                    elif option_id >= len(valid_moves[(x,y)]):
+                        print("Invalid option. Please try again.")
+                        continue
+                    else:
+                        invalid = False
+                        return valid_moves[(x,y)][option_id]
+
+    def display_valid_moves(self, valid_moves: dict[tuple[int, int], list[Move]]):
+        for coord, coord_moves in valid_moves.items():
+            if len(coord_moves) == 0:
+                continue
+
+            print(f"Piece at {coord} has the following moves:")
+            for move in coord_moves:
+                print(f"{coord_moves.index(move)})) {move}")
+

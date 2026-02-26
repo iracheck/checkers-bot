@@ -11,6 +11,9 @@ print(board)
 
 board.move(1,2,2,3)
 
-print("Player 1 (White) move:")
-move1 = player1.get_move(board)
-print(f"Player 1 move: {move1}")
+# print("Player 1 (White) move:")
+# move1 = player1.get_move(board)
+# print(f"Player 1 move: {move1}")
+
+board.clear()
+print(board)

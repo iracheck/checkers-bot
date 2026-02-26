@@ -21,6 +21,12 @@ class Board:
             for x in range(0,8):
                 if not self.is_unplayable_space(x,y):
                     self.set(x,y, Piece(Piece.WHITE))
+
+    def clear(self):
+        for y in range(0,8):
+            for x in range(0,8):
+                if not self.is_unplayable_space(x,y):
+                    self.set(x,y,None)
     
     # low-level grid interactions
     def get(self, x: int, y: int) -> Piece | None:
@@ -164,13 +170,13 @@ class Board:
         return jumps
 
          
-    def get_every_legal(self, color) -> list[Move]:
+    def get_every_legal(self, color) -> dict[tuple[int, int], list[Move]]:
         """Returns every legal position a color can make"""
         pieces = self.get_all_pieces_of_team(color)
-        legal_moves = [[] for piece in pieces]
-        
-        for piece in range(0, len(pieces)):
-            legal_moves[piece] = self.get_legal(pieces[piece][0], pieces[piece][1])
+        legal_moves = {}
+
+        for piece in pieces:
+            legal_moves[piece] = self.get_legal(piece[0], piece[1])
         
         return legal_moves
     

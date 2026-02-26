@@ -2,7 +2,7 @@
 
 A physical checkers-playing robot built by a team of engineers. The robot uses computer vision to read the board state, runs game logic and AI internally, and physically moves pieces using a robotic arm controlled via serial communication.
 
-> **Status:** Early stage development
+> **Status:** Early stage development; Board/robotic design, checkers logic & gameplay development
 
 ---
 
@@ -35,7 +35,7 @@ A physical checkers-playing robot built by a team of engineers. The robot uses c
 
 ```
 checkers-bot/
-├── esp32/                  # ESP32 firmware 
+├── esp32/                   
 │   ├── interface/          # Serial communication with Python brain
 │   ├── control/            # Arm control firmware
 ├── docs/                   # Documentation and serial protocol spec
@@ -46,7 +46,7 @@ checkers-bot/
 │   ├── interface/          # Serial communication with ESP32
 │   ├── data_structures/    # Move sequences and other supporting structures
 │   └── main.py             # Entry point
-└── tests/                  # Unit tests
+└── tests/                  # Unit tests for python
 ```
 
 ---
@@ -64,11 +64,17 @@ checkers-bot/
 
 ## Running the Project
 
-*Setup instructions coming soon.*
+*Setup instructions coming closer to project completion.*
 
 ```bash
 cd python
 python main.py
+```
+
+To run unit tests:
+
+```bash
+python -m pytest
 ```
 
 ---
@@ -84,10 +90,12 @@ Software
 - [ ] Serial communication protocol
 - [ ] Computer vision board detection
 - [ ] Full system integration
+- [ ] Set up GitHub Action to automate unit tests
 
-Board
-- [x] Design general overview
-- [ ] TBA
+Mechanical
+- [x] Theorize board setup/layout
+- [ ] 3D model of Board
+- [ ] 3D model of Robot
 
 Electrical
 - [ ] TBA
