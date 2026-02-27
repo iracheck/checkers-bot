@@ -15,5 +15,4 @@ board.move(1,2,2,3)
 # move1 = player1.get_move(board)
 # print(f"Player 1 move: {move1}")
 
-board.clear()
-print(board)
+print("Has won for WHITE:", board.has_won(Piece.WHITE))

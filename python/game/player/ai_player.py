@@ -8,3 +8,9 @@ class AIPlayer(Player):
 
     def get_move(self, board: Board) -> Move:
         pass
+
+    def minimax():
+        pass
+
+    def evalulate(move: Move) -> int:
+        pass

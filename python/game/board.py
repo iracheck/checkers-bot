@@ -38,7 +38,7 @@ class Board:
     def set(self, x: int, y: int, piece: Piece, force = False):
         """Sets a specific coordinate on the board to the specified object. Use force to ignore invariants."""
         if self.is_unplayable_space(x,y):
-            raise ValueError("Tried to place something in an unplayable space at " + str(x) + str(y))
+            raise ValueError("Tried to place something in an unplayable space at (" + str(x) + "," + str(y) + ")")
         
         self.board[y][x] = piece
     
@@ -87,7 +87,7 @@ class Board:
             return True
         return False
     
-    def get_legal(self, x, y, chained_piece = None, jumped = None) -> list[Move]:
+    def get_legal(self, x, y, chained_piece = None, jumped = None, force_jump = False) -> list[Move]:
         """Returns a list of legal moves from a given position. If chained_piece is not None, it bypasses the requirement of a piece being on a given spot. If jumped is not None, treats those pieces as already jumped (for the purposes of checking for chained jumps)"""
         legal_moves = [] # tuple(int, int)
 
@@ -152,7 +152,7 @@ class Board:
                     legal_moves.append(move)
                 
                 continue
-            else:
+            elif len(jumped) == 0:
                 legal_moves.append(Move([(tested_x, tested_y)], origin=(x,y)))
         
         return self.filter_forced_jumps(legal_moves)
@@ -183,10 +183,15 @@ class Board:
     # game logic
     
     def has_won(self, color) -> bool:
-        """Returns whether a team has won the game or not"""
-        if color == Piece.BLACK and (self.get_num_pieces(Piece.WHITE) or len(self.get_every_legal(Piece.WHITE))) == 0:
+        """Returns whether the specified team has won the game or not"""
+
+
+        print(all(len(moves) == 0 for moves in self.get_every_legal(Piece.WHITE).values()))
+        print(all(len(moves) == 0 for moves in self.get_every_legal(Piece.BLACK).values()))
+
+        if color == Piece.BLACK and (self.get_num_pieces(Piece.WHITE) == 0 or all(len(moves) == 0 for moves in self.get_every_legal(Piece.WHITE).values())):
             return True
-        elif color == Piece.WHITE and (self.get_num_pieces(Piece.BLACK) or len(self.get_every_legal(Piece.BLACK))) == 0:
+        elif color == Piece.WHITE and (self.get_num_pieces(Piece.BLACK) == 0 or all(len(moves) == 0 for moves in self.get_every_legal(Piece.BLACK).values())):
             return True
         else:
             return False
@@ -243,3 +248,4 @@ class Board:
                     
             board_str += "\n"
         return board_str
+    
