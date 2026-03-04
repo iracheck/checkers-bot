@@ -98,9 +98,9 @@ class AIPlayer(Player):
         friendly_pieces = board.get_all_pieces_of_team(self.color)
         enemy_pieces = board.get_all_pieces_of_team(opposing_color)
 
-        # the AI cares only slightly more about getting kings than preserving the lives of its pawns
+        # the AI cares only slightly more about getting/keeping kings than preserving the lives of its pawns, but it really loves keeping its pawns alive
         for piece in friendly_pieces:
-            score_from_pieces += 0.3
+            score_from_pieces += 0.8
             if board.get(piece[0], piece[1]).is_king:
                 score_from_pieces += 0.1
 

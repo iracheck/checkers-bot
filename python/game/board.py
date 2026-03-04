@@ -136,7 +136,7 @@ class Board:
             elif len(jumped) == 0:
                 legal_moves.append(Move([(tested_x, tested_y)], origin=(x,y)))
         
-        return legal_moves
+        return self.filter_forced_jumps(legal_moves)
     
     def get_every_legal(self, color) -> dict[tuple[int, int], list[Move]]:
         """Returns every legal position a color can make"""
@@ -147,23 +147,13 @@ class Board:
             legal_moves[piece] = self.get_legal(piece[0], piece[1])
         
         print(legal_moves)
-        return self.filter_forced_jumps(legal_moves)
+        return legal_moves
     
     def filter_forced_jumps(self, jumps: list[Move]) -> list[Move]:
-        """If there are killing jumps to be made, filter out any non-applicable jumps"""
-        kill_jumps = dict()
-
-        for origin_x, origin_y in jumps:
-            for jump in jumps[origin_x, origin_y]:
-                if len(jump.kills) > 0:
-                    if jump.origin not in kill_jumps:
-                        kill_jumps[jump.origin] = []
-                    kill_jumps[jump.origin].append(jump)
-        
+        kill_jumps = [move for move in jumps if len(move.kills) > 0]
         if len(kill_jumps) > 0:
             return kill_jumps
-        else:
-            return jumps
+        return jumps
     
     # game logic
     
