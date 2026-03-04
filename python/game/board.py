@@ -70,7 +70,7 @@ class Board:
     
     def get_legal(self, x, y, chained_piece = None, jumped = None, force_jump = False) -> list[Move]:
         """Returns a list of legal moves from a given position. If chained_piece is not None, it bypasses the requirement of a piece being on a given spot. If jumped is not None, treats those pieces as already jumped (for the purposes of checking for chained jumps)"""
-        legal_moves = [] # tuple(int, int)
+        legal_moves = []
 
         move_options = {
             Piece.BLACK: [(1,1), (-1,1)],
@@ -136,21 +136,8 @@ class Board:
             elif len(jumped) == 0:
                 legal_moves.append(Move([(tested_x, tested_y)], origin=(x,y)))
         
-        return self.filter_forced_jumps(legal_moves)
+        return legal_moves
     
-    def filter_forced_jumps(self, jumps: list[Move]) -> list[Move]:
-        """If there are killing jumps to be made, filter out any non-applicable jumps"""
-        kill_jumps = []
-
-        for jump in jumps:
-            if len(jump.kills) > 0:
-                kill_jumps.append(jump)
-
-        if len(kill_jumps) > 0:
-            return kill_jumps
-        return jumps
-
-         
     def get_every_legal(self, color) -> dict[tuple[int, int], list[Move]]:
         """Returns every legal position a color can make"""
         pieces = self.get_all_pieces_of_team(color)
@@ -159,7 +146,24 @@ class Board:
         for piece in pieces:
             legal_moves[piece] = self.get_legal(piece[0], piece[1])
         
-        return legal_moves
+        print(legal_moves)
+        return self.filter_forced_jumps(legal_moves)
+    
+    def filter_forced_jumps(self, jumps: list[Move]) -> list[Move]:
+        """If there are killing jumps to be made, filter out any non-applicable jumps"""
+        kill_jumps = dict()
+
+        for origin_x, origin_y in jumps:
+            for jump in jumps[origin_x, origin_y]:
+                if len(jump.kills) > 0:
+                    if jump.origin not in kill_jumps:
+                        kill_jumps[jump.origin] = []
+                    kill_jumps[jump.origin].append(jump)
+        
+        if len(kill_jumps) > 0:
+            return kill_jumps
+        else:
+            return jumps
     
     # game logic
     

@@ -12,6 +12,7 @@ class AIPlayer(Player):
         self.num_turns = 0
 
     def get_move(self, board: Board, num_turns: int) -> Move:
+        '''Get move function that is required by the game in order to get the players' next move'''
         flat_moves = [move for moves in board.get_every_legal(self.color).values() for move in moves]
         self.num_turns = num_turns
 
@@ -36,6 +37,7 @@ class AIPlayer(Player):
         return best_move
 
     def minimax(self, board: Board, depth: int, is_maximizing: bool, alpha=float('-inf'), beta=float('inf')) -> float:
+        '''A recursive function that analyzes every possible outcome of a board and evaluates it, to find the best possible move for the AI'''
         if depth == 0:
             return self.evalulate(board)
         
@@ -72,6 +74,7 @@ class AIPlayer(Player):
 
 
     def evalulate(self, board: Board) -> float:
+        '''Returns a float that says how 'favorable' a board is to the AI'''
         opposing_color = Piece.BLACK
         if (opposing_color == self.color):
             opposing_color = Piece.WHITE
@@ -97,7 +100,7 @@ class AIPlayer(Player):
 
         # the AI cares only slightly more about getting kings than preserving the lives of its pawns
         for piece in friendly_pieces:
-            score_from_pieces += 0.5
+            score_from_pieces += 0.3
             if board.get(piece[0], piece[1]).is_king:
                 score_from_pieces += 0.1
 
@@ -106,11 +109,12 @@ class AIPlayer(Player):
         for piece in enemy_pieces:
             score_from_pieces -= 0.2
             if board.get(piece[0], piece[1]).is_king:
-                score_from_pieces -= 0.5
+                score_from_pieces -= 0.8
 
         # apply a flat bonus for having "more pieces" than the enemy to encourage killing
-        if len(friendly_pieces) > len(enemy_pieces):
-            score_from_pieces *= 2
+        pieces_diff = len(friendly_pieces) - len(enemy_pieces)
+        if pieces_diff > 0:
+            score_from_pieces *= pieces_diff
 
         score_from_num_moves = 0
 
@@ -123,6 +127,7 @@ class AIPlayer(Player):
         return score_from_center + score_from_pieces + score_from_num_moves + random.uniform(-0.25, 0.25)
 
     def opposing_color(self) -> str:
+        '''Returns the color that this AI Player is *not*'''
         if self.color == Piece.BLACK:
             return Piece.WHITE
         else:

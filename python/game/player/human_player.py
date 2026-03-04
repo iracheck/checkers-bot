@@ -6,7 +6,7 @@ class HumanPlayer(Player):
     def __init__(self, color="W"):
         super().__init__(color=color)
 
-    def get_move(self, board: Board) -> Move:
+    def get_move(self, board: Board, turn: int) -> Move:
         invalid = True
         valid_moves = board.get_every_legal(self.color)
 
@@ -20,7 +20,7 @@ class HumanPlayer(Player):
 
         # Loop until the player inputs something valid
         while (invalid):
-            move_str = input("YOUR TURN:\nOptions:\na) Move (Usage: 'move 1 2 option_id')\n")
+            move_str = input(f"YOUR TURN (TURN {turn}):\nOptions:\na) Move (Usage: 'move 1 2 option_id')\n")
             move_str = move_str.split(" ")
             if len(move_str) != 4:
                 print("Invalid input. Please try again.")
@@ -49,7 +49,7 @@ class HumanPlayer(Player):
                         invalid = False
                         return valid_moves[(x,y)][option_id]
 
-    def display_valid_moves(self, valid_moves: dict[tuple[int, int], list[Move]]):
+    def display_valid_moves(self, valid_moves: list[Move]):
         for coord, coord_moves in valid_moves.items():
             if len(coord_moves) == 0:
                 continue
