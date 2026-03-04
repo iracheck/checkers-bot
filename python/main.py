@@ -3,21 +3,30 @@ from game import Piece
 from game.player import HumanPlayer, AIPlayer, LLMPlayer
 
 board = Board()
-player1 = HumanPlayer(Piece.WHITE)
+player1 = AIPlayer(Piece.WHITE)
 player2 = AIPlayer(Piece.BLACK)
 
 print("Initial Board:")
 print(board)
 
-# print("Player 1 (White) move:")
-# move1 = player1.get_move(board)
-# print(f"Player 1 move: {move1}")
-
-print(board.get_every_legal(Piece.WHITE))
-
-print(player2.get_move(board))
-print("Done")
-
 running = True
+turn = 1
 while running:
+    if turn % 2 == 1:
+        move = player1.get_move(board, turn)
+    else:
+        move = player2.get_move(board, turn)
+
+    board.move(move)
+    print(board)
+
+    if board.has_won(player1.color):
+        print("Player 1 wins!")
+        running = False
+    elif board.has_won(player2.color):
+        print("Player 2 wins!")
+        running = False
     
+    turn += 1
+
+print("Done after " + str(turn) + " turns")
