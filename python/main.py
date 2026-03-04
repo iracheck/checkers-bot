@@ -9,10 +9,15 @@ player2 = AIPlayer(Piece.BLACK)
 print("Initial Board:")
 print(board)
 
-board.move(1,2,2,3)
-
 # print("Player 1 (White) move:")
 # move1 = player1.get_move(board)
 # print(f"Player 1 move: {move1}")
 
-print("Has won for WHITE:", board.has_won(Piece.WHITE))
+print(board.get_every_legal(Piece.WHITE))
+
+print(player2.get_move(board))
+print("Done")
+
+running = True
+while running:
+    

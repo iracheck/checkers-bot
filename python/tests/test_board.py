@@ -7,7 +7,8 @@ def test_move():
     board.clear()
 
     board.set(0, 1, Piece(Piece.WHITE))
-    board.move(0, 1, 1, 0)
+    move = board.get_legal(0,1)[0]
+    board.move(move)
 
     assert board.get(1, 0) is not None
 
@@ -16,7 +17,8 @@ def test_promotion():
     board.clear()
 
     board.set(0, 1, Piece(Piece.WHITE))
-    board.move(0, 1, 1, 0)
+    move = board.get_legal(0,1)[0]
+    board.move(move)
 
     assert board.get(1, 0).is_king == True
 
@@ -103,7 +105,8 @@ def test_jump_removes_captured_piece():
     board.set(4, 3, Piece(Piece.WHITE))
     board.set(3, 2, Piece(Piece.BLACK))
 
-    board.move(4, 3, 2, 1)
+    move = board.get_legal(4,3)[0]
+    board.move(move)
 
     assert board.get(3, 2) is None
 
@@ -125,8 +128,6 @@ def test_king_can_jump_backwards():
     board.set(4, 3, Piece(Piece.WHITE))
     board.promote(4,3)
     board.set(5, 4, Piece(Piece.BLACK))
-
-    print(board)
 
     legal_moves = board.get_legal(4, 3)
 

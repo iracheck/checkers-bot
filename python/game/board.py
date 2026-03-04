@@ -43,42 +43,23 @@ class Board:
         self.board[y][x] = piece
     
     # board-piece interaction
-    def move(self, x1: int, y1: int, x2: int, y2: int, force = False) -> bool:
-        """If valid, moves a piece to a given position. Automatically promotes any pieces that are at the opposing end of the board.
-        
-        Be aware that this function does not care about the intermediate nodes-- just the final node. 
-        This has no effect on a physical checkers board, but it does mean that during terminal testing, the player cannot choose a specific path. 
-        This has no effect on the AI, as the AI weighs each Move possibility internally.
-        """
-        
-        moved_piece = self.get(x1,y1)
-        legal_moves = self.get_legal(x1,y1)
-
-        valid = False
-        killed_pieces = []
-        for move in legal_moves:
-            if (x2,y2) in move.path:
-                killed_pieces = move.kills
-                valid = True
-
-        if not (valid or force):
+    
+    def move(self, move: Move) -> bool:
+        moved_piece = self.get(move.origin[0], move.origin[1])
+        if not moved_piece:
             return False
-
-        # move to designated position
-        self.set(x1,y1,None)
-        self.set(x2,y2,moved_piece)
-
-        # kill all pieces that should be killed
-        for piece in killed_pieces:
+        
+        self.set(move.origin[0], move.origin[1], None)
+        self.set(move.path[-1][0], move.path[-1][1], moved_piece)
+        
+        for piece in move.kills:
             self.set(piece[0], piece[1], None)
 
-        # if at the end of board, promote
-        if (moved_piece.color == Piece.BLACK and y2 == 7) or (moved_piece.color == Piece.WHITE and y2 == 0):
+        if (moved_piece.color == Piece.BLACK and move.path[-1][1] == 7) or (moved_piece.color == Piece.WHITE and move.path[-1][1] == 0):
             moved_piece.promote()
 
-            return True
-        else: # move not valid
-            return False
+        return True
+
     
     def promote(self, x: int, y: int) -> bool:
         """Promotes the piece on a given x,y coordinate to a king"""
@@ -185,10 +166,6 @@ class Board:
     def has_won(self, color) -> bool:
         """Returns whether the specified team has won the game or not"""
 
-
-        print(all(len(moves) == 0 for moves in self.get_every_legal(Piece.WHITE).values()))
-        print(all(len(moves) == 0 for moves in self.get_every_legal(Piece.BLACK).values()))
-
         if color == Piece.BLACK and (self.get_num_pieces(Piece.WHITE) == 0 or all(len(moves) == 0 for moves in self.get_every_legal(Piece.WHITE).values())):
             return True
         elif color == Piece.WHITE and (self.get_num_pieces(Piece.BLACK) == 0 or all(len(moves) == 0 for moves in self.get_every_legal(Piece.BLACK).values())):
@@ -199,6 +176,18 @@ class Board:
     def get_all_pieces(self):
         """Returns a list of every piece currently on the board"""
         return self.get_all_pieces_of_team(Piece.WHITE) + self.get_all_pieces_of_team(Piece.BLACK)
+    
+    def get_all_pieces_in_area(self, x1, y1, x2, y2) -> list[tuple[int, int]]:
+        """Returns a list of all pieces in a given rectangular area. Used for computer vision testing."""
+        pieces = []
+        
+        for y in range(y1,y2+1):
+            for x in range(x1,x2+1):
+                if self.is_occupied(x,y):
+                    occupant = self.get(x,y)
+                    if isinstance(occupant, Piece):
+                        pieces.append((x,y))
+        return pieces
     
     def get_all_pieces_of_team(self, color) -> list[tuple[int, int]]:
         """Returns a list of all pieces belonging to a specific color"""
