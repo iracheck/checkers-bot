@@ -6,6 +6,8 @@ class HumanPlayer(Player):
     def __init__(self, color="W"):
         super().__init__(color=color)
 
+
+    # later: update this so it instead uses openCV instead of manual inputs
     def get_move(self, board: Board, turn: int) -> Move:
         invalid = True
         valid_moves = board.get_every_legal(self.color)
