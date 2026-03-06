@@ -4,9 +4,6 @@ from game.move import Move
 from game.board import Board
 
 class Player(ABC):
-
-    color = "B"
-
     def __init__(self, color: str):
         self.color = color
 

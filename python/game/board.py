@@ -150,13 +150,13 @@ class Board:
         return legal_moves
     
     def filter_forced_jumps(self, jumps: list[Move]) -> list[Move]:
+        '''If there are jumps that provide kills, return only those and not the ones that are regular movement.'''
         kill_jumps = [move for move in jumps if len(move.kills) > 0]
         if len(kill_jumps) > 0:
             return kill_jumps
         return jumps
     
     # game logic
-    
     def has_won(self, color) -> bool:
         """Returns whether the specified team has won the game or not"""
 

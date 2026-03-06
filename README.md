@@ -1,5 +1,7 @@
 # checkers-bot 🤖
 
+__**WORK IN PROGRESS**__
+
 A physical checkers-playing robot built by a team of engineers. The robot uses computer vision to read the board state, runs game logic and AI internally, and physically moves pieces using a robotic arm controlled via serial communication.
 
 > **Status:** Early stage development; Board/robotic design, checkers logic & gameplay development
