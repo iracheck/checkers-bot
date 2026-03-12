@@ -9,6 +9,7 @@ import random
 class AIPlayer(Player):
     def __init__(self, color):
         super().__init__(color=color)
+        self.last_kill_time = 0
         self.num_turns = 0
 
     def get_move(self, board: Board, num_turns: int) -> Move:
@@ -34,6 +35,10 @@ class AIPlayer(Player):
                 best_move = move
                 best_score = score
 
+        if len(best_move.kills) > 0:
+            self.last_kill_time = 0
+        else:
+            self.last_kill_time += 1
         return best_move
 
     def minimax(self, board: Board, depth: int, is_maximizing: bool, alpha=float('-inf'), beta=float('inf')) -> float:
@@ -41,7 +46,9 @@ class AIPlayer(Player):
         if depth == 0:
             return self.evalulate(board)
         
-        color = self.color if is_maximizing else self.opposing_color()
+        color = self.color 
+        if is_maximizing:
+            color = self.opposing_color()
         all_moves = board.get_every_legal(color)
 
         flat_moves = [move for moves in all_moves.values() for move in moves]
@@ -107,9 +114,14 @@ class AIPlayer(Player):
 
         # the AI cares much more about preventing enemy from getting kings than killing enemy pieces
         for piece in enemy_pieces:
-            score_from_pieces -= 0.2
+            score_from_pieces -= 0.4
             if board.get(piece[0], piece[1]).is_king:
                 score_from_pieces -= 0.8
+
+            # Additional penalty for not killing pieces recently
+            if self.last_kill_time > 10:
+                score_from_pieces -= 0.75
+
 
         # apply a flat bonus for having "more pieces" than the enemy to encourage killing
         pieces_diff = len(friendly_pieces) - len(enemy_pieces)

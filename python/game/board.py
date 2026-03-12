@@ -136,7 +136,7 @@ class Board:
             elif len(jumped) == 0:
                 legal_moves.append(Move([(tested_x, tested_y)], origin=(x,y)))
         
-        return self.filter_forced_jumps(legal_moves)
+        return legal_moves
     
     def get_every_legal(self, color) -> dict[tuple[int, int], list[Move]]:
         """Returns every legal position a color can make"""
@@ -146,14 +146,24 @@ class Board:
         for piece in pieces:
             legal_moves[piece] = self.get_legal(piece[0], piece[1])
         
-        return legal_moves
+        return self.filter_forced_jumps(legal_moves)
     
-    def filter_forced_jumps(self, jumps: list[Move]) -> list[Move]:
+    def filter_forced_jumps(self, dict_of_jumps: dict) -> list[Move]:
         '''If there are jumps that provide kills, return only those and not the ones that are regular movement.'''
-        kill_jumps = [move for move in jumps if len(move.kills) > 0]
-        if len(kill_jumps) > 0:
-            return kill_jumps
-        return jumps
+        moves_with_kills = {}
+        canKill = False
+
+        for key in dict_of_jumps.keys():
+            moves_with_kills[key] = []
+            for value in dict_of_jumps[key]:
+                if len(value.kills) > 0:
+                    canKill = True
+                    moves_with_kills[key].append(value)
+        
+        if canKill:
+            return moves_with_kills
+        else:
+            return dict_of_jumps
     
     # game logic
     def has_won(self, color) -> bool:
