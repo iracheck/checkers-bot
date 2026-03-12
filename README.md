@@ -1,4 +1,4 @@
-# checkers-bot 🤖
+# checkers-bot
 
 __**WORK IN PROGRESS**__
 
@@ -86,18 +86,16 @@ python -m pytest
 Software
 - [x] Project structure and repository setup
 - [x] Core game engine (board, pieces)
-- [ ] Move validation and legal move generation
-- [ ] Minimax AI with alpha-beta pruning
+- [x] Move validation and legal move generation
+- [x] Minimax AI with alpha-beta pruning
 - [ ] LLM player mode (Minimax vs LLM)
 - [ ] Serial communication protocol
 - [ ] Computer vision board detection
 - [ ] Full system integration
 - [ ] Set up GitHub Action to automate unit tests
 
-Mechanical
-- [x] Theorize board setup/layout
-- [ ] 3D model of Board
-- [ ] 3D model of Robot
-
-Electrical
-- [ ] TBA
+Documentation
+- [x] Write serial protocpl docs
+- [ ] Demo instructions
+- [ ] Calibration instructions
+- [ ] Mechanical design documentation
