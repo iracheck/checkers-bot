@@ -3,7 +3,7 @@ from game import Piece
 from game.player import HumanPlayer, AIPlayer, LLMPlayer
 
 board = Board()
-player1 = HumanPlayer(Piece.WHITE)
+player1 = AIPlayer(Piece.WHITE)
 player2 = AIPlayer(Piece.BLACK)
 
 print("Initial Board:")

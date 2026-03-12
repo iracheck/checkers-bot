@@ -146,7 +146,6 @@ class Board:
         for piece in pieces:
             legal_moves[piece] = self.get_legal(piece[0], piece[1])
         
-        print(legal_moves)
         return legal_moves
     
     def filter_forced_jumps(self, jumps: list[Move]) -> list[Move]:
