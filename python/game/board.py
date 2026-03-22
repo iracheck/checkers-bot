@@ -166,7 +166,7 @@ class Board:
             return dict_of_jumps
     
     # game logic
-    def has_won(self, color) -> bool:
+    def has_won(self, color) -> bool:   
         """Returns whether the specified team has won the game or not"""
 
         if color == Piece.BLACK and (self.get_num_pieces(Piece.WHITE) == 0 or all(len(moves) == 0 for moves in self.get_every_legal(Piece.WHITE).values())):

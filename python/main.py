@@ -1,15 +1,19 @@
 from game import Board
 from game import Piece
 from game.player import HumanPlayer, AIPlayer, LLMPlayer
+from interface import SerialCom
 
 board = Board()
+serial_com = SerialCom()
 player1 = AIPlayer(Piece.WHITE)
 player2 = AIPlayer(Piece.BLACK)
 
+serial_com.list_ports()
+serial_com.find_valid_serial_device()
 print("Initial Board:")
 print(board)
 
-running = True
+running = False
 turn = 1
 while running:
     if turn % 2 == 1:
