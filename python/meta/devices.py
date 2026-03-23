@@ -1,6 +1,7 @@
 SUPPORTED_DEVICES = {
-    # While there is no reason that any microcontroller can be successfully used, these are the ones that the program specifically searches for when it starts. 
-    # Most (if not all) microcontrollers that are capable of loading the firmware located in 'firmware/' should be capable of running this, provided they are added below.
+    # While technically any microcontroller be successfully used, these are the ones that the program specifically searches for when it starts. 
+    # Most (if not all) microcontrollers that are capable of loading the firmware located in 'firmware/' should be capable of running this, provided they are added below
+    # to the list of microcontrollers to search for.
 
     # Arduino Uno (3/21/26)
     (

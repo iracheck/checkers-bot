@@ -8,7 +8,6 @@ serial_com = SerialCom()
 player1 = AIPlayer(Piece.WHITE)
 player2 = AIPlayer(Piece.BLACK)
 
-serial_com.list_ports()
 serial_com.find_valid_serial_device()
 print("Initial Board:")
 print(board)
