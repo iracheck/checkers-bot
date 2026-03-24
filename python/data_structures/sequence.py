@@ -10,8 +10,9 @@ class Sequence:
 
     def get_next(self) -> Command:
         '''Returns the next item in the sequence'''
+        command = self.commands[self.completed]
         self.completed += 1
-        return self.commands[self.completed]
+        return command
     
     def _advance(self) -> int:
         '''Advances to the next index. The same as doing self.completed += 1'''
@@ -24,9 +25,10 @@ class Sequence:
         Returns the next move.'''
         if index is None:
             index = self.completed - 1
-        return self.get_next(index)
+        self.completed = index
+        return self.get_next()
 
-    def retry(self, index = 0) -> int:
+    def restart(self, index = 0) -> int:
         '''Restarts from the given index. Defaults to starting from the very beginning
         
         Returns the new number of retries.'''

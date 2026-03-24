@@ -1,6 +1,6 @@
 import serial
 import serial.tools.list_ports
-from time import sleep
+from time import sleep, time
 from meta import SUPPORTED_DEVICES
 
 class SerialCom:
@@ -20,14 +20,25 @@ class SerialCom:
         
         self.ser.write(command + b"\n")
 
-    def block_until_recieved(self, timeout = 2000):
+    def block_until_recieved(self, timeout = 2000) -> bytes:
         '''Block the program from continuing until a response is recieved. Defaults to a 2000 millisecond timeout before it breaks the loop.'''
-        pass
+        start = time.time()
+        while True:
+            if self.ser.in_waiting:
+                return self.get_message()
+            if (time.time() - start) * 1000 > timeout:
+                raise TimeoutError("No response from robot")
+            sleep(0.01)
 
-    def get_message(self):
+    def get_message(self) -> bytes | None:
         messages = self.ser.read_all()
 
-        self.message_queue += messages
+        self.message_queue.append(messages)
+
+        if len(messages) > 0:
+            return messages
+        else:
+            return None
 
     def open(self):
         if self.ser is not None:
@@ -43,11 +54,17 @@ class SerialCom:
             self.ser.close()
             self.ser = None
 
-    def find_robot(self):
+        return self.ser is None
+
+    def connect(self) -> bool:
         self.port = self.find_valid_serial_device()
         self.device = self.port.description
 
         self.ser = serial.Serial(self.port.device, 9600)
+
+        if self.port is None:
+            return False
+        return True
 
     def find_valid_serial_device(self): 
         '''Returns the *FIRST* valid microcontroller (esp32, arduino uno) that might be the checkers robot. 
@@ -67,6 +84,9 @@ class SerialCom:
                         if supported_device[0] == port.vid and supported_device[1] == port.pid:
                             found_port = port
             sleep(1)
+
+        if found_port is None:
+            raise RuntimeError("Could not find a connected robot.")
         
         return found_port
 
