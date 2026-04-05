@@ -1,1 +1,1 @@
-from cv import ComputerVision
+from computer_vision.cv import ComputerVision
