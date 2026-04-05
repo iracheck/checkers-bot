@@ -2,18 +2,19 @@ from game import Board
 from game import Piece
 from game.player import HumanPlayer, AIPlayer, LLMPlayer
 from interface import SerialCom
+from computer_vision import ComputerVision
 
 board = Board()
+computer_vision = ComputerVision()
 serial_com = SerialCom()
 player1 = AIPlayer(Piece.WHITE)
 player2 = AIPlayer(Piece.BLACK)
 
-serial_com.find_valid_serial_device()
 print("Initial Board:")
 print(board)
 
-running = False
 turn = 1
+running = True
 while running:
     if turn % 2 == 1:
         move = player1.get_move(board, turn)

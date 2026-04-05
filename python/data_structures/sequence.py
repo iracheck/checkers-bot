@@ -1,5 +1,6 @@
 from queue import Queue
 from data_structures import Command
+from game.move import Move
 
 class Sequence:
     '''A sequence is similar to a queue but much less advanced, as the requirements for this project are significantly lower, but still want the functionality of pulling from the first element in the list.'''
@@ -11,11 +12,11 @@ class Sequence:
     def get_next(self) -> Command:
         '''Returns the next item in the sequence'''
         command = self.commands[self.completed]
-        self.completed += 1
+        self._advance()
         return command
     
     def _advance(self) -> int:
-        '''Advances to the next index. The same as doing self.completed += 1'''
+        '''Advances to the next index. The same as doing self.completed += 1 but it returns the new index.'''
         self.completed += 1
         return self.completed
     
@@ -27,6 +28,11 @@ class Sequence:
             index = self.completed - 1
         self.completed = index
         return self.get_next()
+    
+    def from_move(self, move: Move):
+        #TODO: Implement this when the mechanical engineers finish their tasks
+        pass
+        
 
     def restart(self, index = 0) -> int:
         '''Restarts from the given index. Defaults to starting from the very beginning

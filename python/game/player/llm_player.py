@@ -9,6 +9,7 @@ class LLMType:
     OPENAI = "CHATGPT"
     GOOGLE = "GEMINI"
     ANTHROPIC = "CLAUDE"
+    XAI = "GROK"
 
 
 class LLMPlayer(Player):
