@@ -3,8 +3,7 @@ from data_structures import Command
 from game.move import Move
 
 class Sequence:
-    '''A sequence is similar to a queue but much less advanced, as the requirements for this project are significantly lower, but still want the functionality of pulling from the first element in the list.'''
-    def __init__(self, size = 32):
+    def __init__(self):
         self.commands = []
         self.completed = 0
         self.retry_count = 0
@@ -28,11 +27,6 @@ class Sequence:
             index = self.completed - 1
         self.completed = index
         return self.get_next()
-    
-    def from_move(self, move: Move):
-        #TODO: Implement this when the mechanical engineers finish their tasks
-        pass
-        
 
     def restart(self, index = 0) -> int:
         '''Restarts from the given index. Defaults to starting from the very beginning
@@ -46,3 +40,7 @@ class Sequence:
         
         return self.retry_count
     
+    def from_move(self, move: Move):
+        '''Creates a sequence given a move-- essentially, devises a sequence of mechanical movements in order to complete each step of the move.'''
+        #TODO: Implement this when the mechanical engineers finish their tasks
+        pass

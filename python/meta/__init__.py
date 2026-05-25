@@ -1,1 +1,1 @@
-from .devices import SUPPORTED_DEVICES
+from .supported_devices import SUPPORTED_DEVICES

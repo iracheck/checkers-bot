@@ -7,10 +7,14 @@ import copy
 import random
     
 class AIPlayer(Player):
-    def __init__(self, color):
+    def __init__(self, difficulty: int, color):
         super().__init__(color=color)
+        self.difficulty = difficulty
         self.last_kill_time = 0
         self.num_turns = 0
+
+        if self.difficulty >= 47:
+            print("For performance reasons, difficulty (recursion depth) values around or over 50 are not recommended.")
 
     def get_move(self, board: Board, num_turns: int) -> Move:
         '''Get move function that is required by the game in order to get the players' next move'''
@@ -29,7 +33,7 @@ class AIPlayer(Player):
             if not result:
                 continue
 
-            score = self.minimax(sim_board, 50, False)
+            score = self.minimax(sim_board, self.difficulty, False)
 
             if best_move is None or score > best_score:
                 best_move = move
@@ -136,7 +140,7 @@ class AIPlayer(Player):
                 score_from_num_moves += 0.2
          
 
-        return score_from_center + score_from_pieces + score_from_num_moves + random.uniform(-0.25, 0.25)
+        return score_from_center + score_from_pieces + score_from_num_moves + random.uniform(-0.25, 0.25) - self.num_turns
 
     def opposing_color(self) -> str:
         '''Returns the color that this AI Player is *not*'''

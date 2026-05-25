@@ -7,8 +7,8 @@ from computer_vision import ComputerVision
 board = Board()
 computer_vision = ComputerVision()
 serial_com = SerialCom()
-player1 = AIPlayer(Piece.WHITE)
-player2 = LLMPlayer(LLMType.GOOGLE, Piece.BLACK)
+player1 = AIPlayer(12, Piece.WHITE)
+player2 = AIPlayer(12, Piece.BLACK)
 
 print("Initial Board:")
 print(board)

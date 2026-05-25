@@ -42,9 +42,8 @@ class LLMPlayer(Player):
                 except:
                     print("[WARNING] Gemini returned an invalid response.")
                     continue
-                if msg == 0 or msg > len(indexed_moves):
-                    raise RuntimeError("LLM returned an invalid string.")
-                
+                if msg <= 0 or msg > len(indexed_moves) or indexed_moves[msg] is None:
+                    raise RuntimeError("LLM returned an invalid string.")               
 
 
             elif self.is_chatgpt():
@@ -102,9 +101,6 @@ class LLMPlayer(Player):
             return None
 
         response = self.client.models.generate_content(model=llm_model, contents=prompt)
-
-        if print_response:
-            print(response.text)
         
         return response.text
         
