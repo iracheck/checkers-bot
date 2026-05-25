@@ -1,6 +1,6 @@
 from game import Board
 from game import Piece
-from game.player import HumanPlayer, AIPlayer, LLMPlayer
+from game.player import HumanPlayer, AIPlayer, LLMPlayer, LLMType
 from interface import SerialCom
 from computer_vision import ComputerVision
 
@@ -8,7 +8,7 @@ board = Board()
 computer_vision = ComputerVision()
 serial_com = SerialCom()
 player1 = AIPlayer(Piece.WHITE)
-player2 = AIPlayer(Piece.BLACK)
+player2 = LLMPlayer(LLMType.GOOGLE, Piece.BLACK)
 
 print("Initial Board:")
 print(board)
@@ -20,6 +20,9 @@ while running:
         move = player1.get_move(board, turn)
     else:
         move = player2.get_move(board, turn)
+
+    if turn > 100:
+        running = False
 
     board.move(move)
     if len(move.kills) > 0:
