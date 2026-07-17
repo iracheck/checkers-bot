@@ -4,14 +4,19 @@ from game.player import HumanPlayer, AIPlayer, LLMPlayer, LLMType
 from interface import SerialCom
 from computer_vision import ComputerVision
 
+print("Initializing components...")
 board = Board()
-computer_vision = ComputerVision()
+vision = ComputerVision()
 serial_com = SerialCom()
 player1 = AIPlayer(12, Piece.WHITE)
 player2 = AIPlayer(12, Piece.BLACK)
 
-print("Initial Board:")
-print(board)
+vision.run()
+
+try:
+    serial_com.connect()
+except:
+    print("No serial device is connected")
 
 turn = 1
 running = True

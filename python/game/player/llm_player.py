@@ -82,7 +82,7 @@ class LLMPlayer(Player):
         {board}\n\n 
         Here are the following moves you have avaliable: \n
         {indexed_moves}\n\n
-        To choose a move, return only the index of the move you'd like to make (e.g. 1). Do not give an explanation. If there are no moves possible, return 0."""
+        To choose a move, return only the index of the move you'd like to make (e.g. 1). Do not give an explanation. Return 0 on failure."""
         
         return msg
         
@@ -101,6 +101,9 @@ class LLMPlayer(Player):
             return None
 
         response = self.client.models.generate_content(model=llm_model, contents=prompt)
+
+        if print_response:
+            print(response.text)
         
         return response.text
         
