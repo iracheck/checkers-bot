@@ -57,10 +57,8 @@ checkers-bot/
 
 | Name | Role |
 |---|---|
-| Cristian Fabian | Electrical Engineer |
 | Ira Check | Software Engineer |
 | Zachary Brannigan | Mechanical Engineer |
-| Connor Macalalad | Mechanical Engineer |
 
 ---
 

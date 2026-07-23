@@ -23,7 +23,11 @@ class AIPlayer(Player):
 
         best_move = None
         best_score = float('-inf')
+        alpha = float('-inf')
+        beta = float('inf')
 
+
+        #TODO: Implement a better copy method for faster minimax
         for move in flat_moves:
 
             sim_board = copy.deepcopy(board)
@@ -33,11 +37,13 @@ class AIPlayer(Player):
             if not result:
                 continue
 
-            score = self.minimax(sim_board, self.difficulty, False)
+            score = self.minimax(sim_board, self.difficulty, False, alpha, beta)
 
             if best_move is None or score > best_score:
                 best_move = move
                 best_score = score
+
+            alpha = max(alpha, best_score)
 
         if len(best_move.kills) > 0:
             self.last_kill_time = 0
@@ -66,7 +72,7 @@ class AIPlayer(Player):
                 score = self.minimax(sim_board, depth - 1, False, alpha, beta)
                 best = max(best, score)
 
-                alpha = max(beta,best)
+                alpha = max(alpha, best)
                 if beta >= alpha:
                     break
             return best
@@ -79,7 +85,7 @@ class AIPlayer(Player):
                 best = min(best, score)
 
                 beta = min(beta, best)
-                if beta >= alpha:
+                if beta <= alpha:
                     break
             return best
 

@@ -1,3 +1,5 @@
+import time
+
 from game import Board
 from game import Piece
 from game.player import HumanPlayer, AIPlayer, LLMPlayer, LLMType
@@ -8,15 +10,17 @@ print("Initializing components...")
 board = Board()
 vision = ComputerVision()
 serial_com = SerialCom()
-player1 = AIPlayer(12, Piece.WHITE)
-player2 = AIPlayer(12, Piece.BLACK)
+player1 = AIPlayer(5, Piece.WHITE)
+player2 = AIPlayer(5, Piece.BLACK)
 
-vision.run()
+# vision.run()
 
-try:
-    serial_com.connect()
-except:
-    print("No serial device is connected")
+# try:
+#     serial_com.connect()
+# except:
+#     print("No serial device is connected")
+
+start_time = time.perf_counter()
 
 turn = 1
 running = True
@@ -45,4 +49,7 @@ while running:
     
     turn += 1
 
+end_time = time.perf_counter()
+
 print("Done after " + str(turn) + " turns")
+print("Game took: " + str(end_time - start_time) + " seconds.")
