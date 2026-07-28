@@ -6,12 +6,23 @@ from meta import SUPPORTED_DEVICES
 class SerialCom:
     '''SerialCom is a pyserial wrapper that helps send and recieve data from the robotic arm.'''
 
-    def __init__(self):
+    def __init__(self, connect=False):
         self.ser: serial.Serial | None = None
         self.port = None
         self.device: str | None = None
         self.message_queue: list[bytes] = []
-        pass
+
+        if connect:
+            self.connect()
+
+    def encode(self, message: str, send = False) -> bytes:
+        '''Encodes a message, and optionally sends the encoded message through the serial bus.'''
+        msg = str.encode(message)
+
+        if send:
+            self.send_command(msg)
+
+        return msg
 
     def send_command(self, command: bytes):
         '''Sends a command to the connected microcontroller.'''
@@ -20,21 +31,36 @@ class SerialCom:
         
         self.ser.write(command + b"\n")
 
-    def block_until_recieved(self, timeout = 2000) -> bytes:
+    def send_and_wait(self, command: bytes, timeout = 2000):
+        '''Sends a command (in bytes) and waits for a response back from the robot. This essentially just combines the send_command() and block_until_recieved() methods.'''
+
+        if isinstance(command, str):
+            command = self.encode(command)
+
+        self.send_command(command)
+        return self.block_until_recieved(timeout)
+
+    def block_until_recieved(self, timeout = 6000) -> bytes:
         '''Block the program from continuing until a response is recieved. Defaults to a 2000 millisecond timeout before it breaks the loop.'''
         start = time()
         while True:
             if self.ser.in_waiting:
                 return self.get_message()
             if (time() - start) * 1000 > timeout:
-                raise TimeoutError("No response from robot")
+                print("Could not find robot")
+                return
+                # raise TimeoutError("NO_RESPONSE ERROR: No response recieved from the robot")
             sleep(0.01)
 
     def get_message(self) -> bytes | None:
         messages = self.ser.read_all()
 
+        print(messages)
+
+        split_messages = messages.split(b"\n")
+
         if len(messages) > 0:
-            self.message_queue.append(messages)
+            self.message_queue.append(split_messages)
             return messages
         else:
             return None
@@ -47,6 +73,7 @@ class SerialCom:
             raise RuntimeError("No port selected.")
         
         self.ser = serial.Serial(self.port.device, 9600)
+        return self.ser
 
     def close(self):
         if self.ser is not None:
@@ -56,16 +83,14 @@ class SerialCom:
         return self.ser is None
 
     def connect(self, port = None) -> bool:
+        '''Connect to a given port, or if no port is provided, search for a potentially valid connected serial device.'''
         if port is None: 
             self.port = self._find_valid_serial_device()
         else:
             self.port = port
 
-        if self.port is None:
-            return False
-
         self.device = self.port.description
-        self.ser = serial.Serial(self.port.device, 9600)
+        self.open()
 
         return True
 
@@ -97,6 +122,7 @@ class SerialCom:
         return found_port
 
 
+    # debug
     def list_ports(self):
         ports = self.get_ports()
 

@@ -59,5 +59,5 @@ Example: `ERROR [reason]`
 - BAD_ARGUMENT_COUNT  
 - BAD_ARGUMENT_VALUE  
 - MOTION_FAILURE  
-- TIMEOUT (>3 seconds to return `DONE` or other message)
+- NO_RESPONSE (>3 seconds to return `DONE` or other failure)
 
