@@ -6,14 +6,16 @@ from meta import SUPPORTED_DEVICES
 class SerialCom:
     '''SerialCom is a pyserial wrapper that helps send and recieve data from the robotic arm.'''
 
-    def __init__(self, connect=False):
+    def __init__(self, connect=False, debug=False):
         self.ser: serial.Serial | None = None
         self.port = None
         self.device: str | None = None
         self.message_queue: list[bytes] = []
+        self.DEBUG = debug
 
         if connect:
             self.connect()
+            self.send_and_wait("PING", 15000)
 
     def encode(self, message: str, send = False) -> bytes:
         '''Encodes a message, and optionally sends the encoded message through the serial bus.'''
@@ -47,21 +49,17 @@ class SerialCom:
             if self.ser.in_waiting:
                 return self.get_message()
             if (time() - start) * 1000 > timeout:
-                print("Could not find robot")
                 return
-                # raise TimeoutError("NO_RESPONSE ERROR: No response recieved from the robot")
             sleep(0.01)
 
-    def get_message(self) -> bytes | None:
-        messages = self.ser.read_all()
+    def get_message(self) -> list[str] | None:
+        message = self.ser.read_all()
 
-        print(messages)
+        message = message.decode()
 
-        split_messages = messages.split(b"\n")
-
-        if len(messages) > 0:
-            self.message_queue.append(split_messages)
-            return messages
+        if len(message) > 0:
+            if self.DEBUG: print(message)
+            return message
         else:
             return None
 
@@ -90,7 +88,12 @@ class SerialCom:
             self.port = port
 
         self.device = self.port.description
-        self.open()
+
+        ser = self.open()
+
+        if ser is not None:
+            print("Found a potentially valid serial device. Please wait.")
+            sleep(3)
 
         return True
 
@@ -111,10 +114,10 @@ class SerialCom:
             for port in ports:
                 if not found_port:
                     for supported_device in SUPPORTED_DEVICES.keys():
-                        #TODO: Make it so, if a potentially valid device is found, it tries to ping it to see if the firmware is loaded onto it
                         if supported_device[0] == port.vid and supported_device[1] == port.pid:
                             found_port = port
             sleep(0.5)
+        print("\n")
 
         if found_port is None:
             raise RuntimeError("Could not find a connected robot.")

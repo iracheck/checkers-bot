@@ -10,7 +10,11 @@ class Sequence:
 
     def get_next(self) -> Command:
         '''Returns the next item in the sequence'''
+        if self.is_complete():
+            return None
+        
         command = self.commands[self.completed]
+        
         self._advance()
         return command
     
@@ -32,7 +36,7 @@ class Sequence:
         '''Restarts from the given index. Defaults to starting from the very beginning
         
         Returns the new number of retries.'''
-        self.completed = 0
+        self.completed = index
         self.retry_count += 1
 
         if self.retry_count >= 2:
@@ -41,6 +45,9 @@ class Sequence:
         return self.retry_count
     
     def from_move(self, move: Move):
-        '''Creates a sequence given a move-- essentially, devises a sequence of mechanical movements in order to complete each step of the move.'''
+        '''Creates a sequence given a move-- essentially, devises a sequence of arduino commands in order to complete each step of the move.'''
         #TODO: Implement this when the mechanical engineers finish their tasks
         pass
+
+    def is_complete(self) -> bool:
+        return self.completed >= len(self.commands)

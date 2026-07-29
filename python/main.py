@@ -18,7 +18,7 @@ def main(args):
     print("Initializing components...")
     board = Board()
     vision = ComputerVision()
-    serial_com = SerialCom(True)
+    serial_com = SerialCom(True, DEBUG)
     player1 = getPlayer(args.player1, Piece.WHITE)
     player2 = getPlayer(args.player2, Piece.BLACK)
     turn = 0
@@ -33,8 +33,6 @@ def main(args):
 
     while running:
         turn += 1
-
-        print(serial_com.send_and_wait("Test"))
 
         if turn % 2 == 1:
             move = player1.get_move(board, turn)
