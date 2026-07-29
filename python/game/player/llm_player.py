@@ -97,7 +97,7 @@ class LLMPlayer(Player):
         
     def query_gemini(self, prompt: str, llm_model="gemini-2.5-flash-lite", print_response=False):
         if not self.is_gemini():
-            print("Tried to query Gemini when Gemini is not the active model.")
+            print("Tried to query Gemini when Gemini is not the active model. This shouldn't be possible")
             return None
 
         response = self.client.models.generate_content(model=llm_model, contents=prompt)

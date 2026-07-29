@@ -54,11 +54,11 @@ class AIPlayer(Player):
     def minimax(self, board: Board, depth: int, is_maximizing: bool, alpha=float('-inf'), beta=float('inf')) -> float:
         '''A recursive function that analyzes every possible outcome of a board and evaluates it, to find the best possible move for the AI'''
         if depth == 0:
-            return self.evalulate(board)
+            return self.evaluate(board)
         
-        color = self.color 
+        color = self.opposing_color() 
         if is_maximizing:
-            color = self.opposing_color()
+            color = self.color
         all_moves = board.get_every_legal(color)
 
         flat_moves = [move for moves in all_moves.values() for move in moves]
@@ -73,7 +73,7 @@ class AIPlayer(Player):
                 best = max(best, score)
 
                 alpha = max(alpha, best)
-                if beta >= alpha:
+                if beta <= alpha:
                     break
             return best
         else:
@@ -90,7 +90,7 @@ class AIPlayer(Player):
             return best
 
 
-    def evalulate(self, board: Board) -> float:
+    def evaluate(self, board: Board) -> float:
         '''Returns a float that says how 'favorable' a board is to the AI'''
         opposing_color = Piece.BLACK
         if (opposing_color == self.color):

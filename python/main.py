@@ -47,7 +47,7 @@ def main(args):
             print(f"Piece ({move.origin[0]}, {move.origin[1]}) was moved to ({move.path[-1][0]}, {move.path[-1][1]}) and killed the following pieces: {move.kills}")
         else:
             print(f"Piece ({move.origin[0]}, {move.origin[1]}) was moved to ({move.path[-1][0]}, {move.path[-1][1]})")
-        # print(board)
+        print(board)
 
         if board.has_won(player1.color):
             print("Player 1 wins!")
@@ -64,6 +64,7 @@ def main(args):
 
 def getPlayer(arg: str, color: str):
     if arg[0:2] == "ai":
+        print(color + " is diff" + arg[2])
         return AIPlayer(int(arg[2]), color)
     elif arg == "Gemini":
         return LLMPlayer(LLMType.GOOGLE, color)
