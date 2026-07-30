@@ -17,15 +17,6 @@ class SerialCom:
             self.connect()
             self.send_and_wait("PING", 15000)
 
-    def encode(self, message: str, send = False) -> bytes:
-        '''Encodes a message, and optionally sends the encoded message through the serial bus.'''
-        msg = str.encode(message)
-
-        if send:
-            self.send_command(msg)
-
-        return msg
-
     def send_command(self, command: bytes):
         '''Sends a command to the connected microcontroller.'''
         if self.ser is None:
@@ -37,7 +28,7 @@ class SerialCom:
         '''Sends a command (in bytes) and waits for a response back from the robot. This essentially just combines the send_command() and block_until_recieved() methods.'''
 
         if isinstance(command, str):
-            command = self.encode(command)
+            command = str.encode(command)
 
         self.send_command(command)
         return self.block_until_recieved(timeout)

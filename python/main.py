@@ -4,8 +4,9 @@ import argparse
 from game import Board
 from game import Piece
 from game.player import HumanPlayer, AIPlayer, LLMPlayer, LLMType
-from interface import SerialCom
+from interface import SerialCom, SequenceRunner
 from computer_vision import ComputerVision
+from 
 
 # INFORMATION TEXT
 PLAYER_SELECTION_HELP = "Options: 'Human' 'AI[x]' 'Google' (E.g. AI5 is AI with difficulty 5)"

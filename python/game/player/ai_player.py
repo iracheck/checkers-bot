@@ -119,7 +119,7 @@ class AIPlayer(Player):
         for piece in friendly_pieces:
             score_from_pieces += 0.8
             if board.get(piece[0], piece[1]).is_king:
-                score_from_pieces += 0.1
+                score_from_pieces += 0.2
 
 
         # the AI cares much more about preventing enemy from getting kings than killing enemy pieces
@@ -128,9 +128,9 @@ class AIPlayer(Player):
             if board.get(piece[0], piece[1]).is_king:
                 score_from_pieces -= 0.8
 
-            # Additional penalty for not killing pieces recently
-            if self.last_kill_time > 10:
-                score_from_pieces -= 0.75
+        # Additional penalty for not killing pieces recently
+        if self.last_kill_time > 10:
+            score_from_pieces -= (self.last_kill_time - 9)
 
 
         # apply a flat bonus for having "more pieces" than the enemy to encourage killing
@@ -143,10 +143,12 @@ class AIPlayer(Player):
         moves = board.get_every_legal(self.color)
         for move in moves:
             for option in move:
-                score_from_num_moves += 0.2
-         
+                score_from_num_moves += 0.02
 
-        return score_from_center + score_from_pieces + score_from_num_moves + random.uniform(-0.25, 0.25) - self.num_turns
+        score = score_from_center + score_from_pieces + score_from_num_moves + random.uniform(-0.25, 0.25)
+
+        print(score)
+        return score
 
     def opposing_color(self) -> str:
         '''Returns the color that this AI Player is *not*'''
