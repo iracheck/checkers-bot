@@ -95,7 +95,7 @@ class SerialCom:
     def _find_valid_serial_device(self): 
         '''Returns the *FIRST* valid microcontroller (esp32, arduino uno) that might be the checkers robot. 
         
-        If there are multiple microcontrollers connected, it might not find the correct one. Always plug in the robot first so that it attaches to the earliest serial device.'''
+        The method tries to ping the microcontroller and recieve a response, so it may take some time if you have many serial devices connected at one time.'''
         found_port = None
 
         print("Connect the robot, if it is not already connected.\nSearching for device.", end = "")
