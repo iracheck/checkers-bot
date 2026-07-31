@@ -1,5 +1,5 @@
-from python.data_structures.sequence import Sequence
-from python.interface.serial_interface import SerialCom
+from data_structures.sequence import Sequence
+from interface.serial_interface import SerialCom
 
 
 class SequenceRunner:
@@ -17,6 +17,7 @@ class SequenceRunner:
             except TimeoutError:
                 response = None
 
+            print(response)
             if response is None:
                 if sequence.retry_count >= self.max_retries:
                     raise RuntimeError(f"Sequence failed after {self.max_retries} retries: {command}")

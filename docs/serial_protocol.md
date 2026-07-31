@@ -50,14 +50,16 @@ Usage: `MAGNET_OFF`
 ### DONE  
 Example: `DONE`  
 *Indicates that the command was successfully received and completed without detected error.*
+
+### PONG
+Example: `PONG!`
+*Returns when a `PING` command is sent to the robot.*
+
 ### ERROR
-Example: `ERROR [reason]`  
+Example: `ERROR_[reason]`  
   
 *Indicates an error that happened, and gives a code relating to its nature*
 **Possible reasons include**:  
 - INVALID_COMMAND  
 - BAD_ARGUMENT_COUNT  
-- BAD_ARGUMENT_VALUE  
-- MOTION_FAILURE  
-- NO_RESPONSE (>3 seconds to return `DONE` or other failure)
-
+- BAD_ARGUMENT_VALUE 

@@ -6,7 +6,7 @@ from game import Piece
 from game.player import HumanPlayer, AIPlayer, LLMPlayer, LLMType
 from interface import SerialCom, SequenceRunner
 from computer_vision import ComputerVision
-from 
+from data_structures.sequence import Sequence
 
 # INFORMATION TEXT
 PLAYER_SELECTION_HELP = "Options: 'Human' 'AI[x]' 'Google' (E.g. AI5 is AI with difficulty 5)"
@@ -20,8 +20,10 @@ def main(args):
     board = Board()
     vision = ComputerVision()
     serial_com = SerialCom(True, DEBUG)
+    runner = SequenceRunner(serial_com)
     player1 = getPlayer(args.player1, Piece.WHITE)
     player2 = getPlayer(args.player2, Piece.BLACK)
+
     turn = 0
     running = True
 
@@ -31,6 +33,10 @@ def main(args):
     #     if DEBUG: print(e)
 
     if DEBUG: start_time = time.perf_counter()
+
+    # runner.run(Sequence(["PING", "MOVE", "C"]))
+
+    return
 
     while running:
         turn += 1
@@ -65,7 +71,6 @@ def main(args):
 
 def getPlayer(arg: str, color: str):
     if arg[0:2] == "ai":
-        print(color + " is diff" + arg[2])
         return AIPlayer(int(arg[2]), color)
     elif arg == "Gemini":
         return LLMPlayer(LLMType.GOOGLE, color)
@@ -89,5 +94,4 @@ def parse_args():
 
 if __name__ == "__main__":
     args = parse_args()
-
     main(args)

@@ -10,7 +10,7 @@ class SerialCom:
         self.ser: serial.Serial | None = None
         self.port = None
         self.device: str | None = None
-        self.message_queue: list[bytes] = []
+        self._read_buffer = b""
         self.DEBUG = debug
 
         if connect:
@@ -33,26 +33,31 @@ class SerialCom:
         self.send_command(command)
         return self.block_until_recieved(timeout)
 
-    def block_until_recieved(self, timeout = 6000) -> bytes:
+    def block_until_recieved(self, timeout = 6000) -> str:
         '''Block the program from continuing until a response is recieved. Defaults to a 2000 millisecond timeout before it breaks the loop.'''
         start = time()
         while True:
-            if self.ser.in_waiting:
-                return self.get_message()
+            message = self.get_message()
+            if message is not None:
+                return message.decode().strip()
+            
             if (time() - start) * 1000 > timeout:
                 return
             sleep(0.01)
 
-    def get_message(self) -> list[str] | None:
-        message = self.ser.read_all()
+    def get_message(self) -> bytes:
+        data = self.ser.read_all()
 
-        message = message.decode()
+        if data:
+            self._read_buffer += data
 
-        if len(message) > 0:
-            if self.DEBUG: print(message)
-            return message
-        else:
+        if b"\n" not in self._read_buffer:
             return None
+
+        split_buf = self._read_buffer.split(b"\n", 1)
+
+        self._read_buffer = split_buf[1]
+        return split_buf[0]
 
     def open(self):
         if self.ser is not None:
@@ -83,7 +88,6 @@ class SerialCom:
         ser = self.open()
 
         if ser is not None:
-            print("Found a potentially valid serial device. Please wait.")
             sleep(3)
 
         return True
@@ -107,6 +111,13 @@ class SerialCom:
                     for supported_device in SUPPORTED_DEVICES.keys():
                         if supported_device[0] == port.vid and supported_device[1] == port.pid:
                             found_port = port
+
+                            self.connect(found_port)
+                            response = self.send_and_wait("PING\n")
+                            if response == "PONG!":
+                                print("\nSuccessfully connected to " + SUPPORTED_DEVICES[supported_device])
+                                return port
+                            
             sleep(0.5)
         print("\n")
 

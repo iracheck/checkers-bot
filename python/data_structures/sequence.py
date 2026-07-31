@@ -3,8 +3,12 @@ from data_structures import Command
 from game.move import Move
 
 class Sequence:
-    def __init__(self):
-        self.commands = []
+    def __init__(self, commands: list[str] = None):
+        if commands:
+            self.commands = commands
+        else:
+            commands = []
+            
         self.completed = 0
         self.retry_count = 0
 
@@ -47,6 +51,7 @@ class Sequence:
     def from_move(self, move: Move):
         '''Creates a sequence given a move-- essentially, devises a sequence of arduino commands in order to complete each step of the move.'''
         #TODO: Implement this when the mechanical engineers finish their tasks
+        # this will work by essentially using an IK-formula to find the targets of the 
         pass
 
     def is_complete(self) -> bool:
