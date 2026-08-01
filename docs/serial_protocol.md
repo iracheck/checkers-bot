@@ -43,7 +43,7 @@ Usage: `GRIPPER state`
 *Changes the state of the piece gripper*
 
 **Parameters**:
- - `state`: the state of the electromagnet; 0 for off, 1 for on
+ - `state`: the state of the gripper; 0 for open, 1 for closed
 
  ### PING
  Usage: `PING`
