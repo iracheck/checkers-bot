@@ -20,7 +20,6 @@ class SequenceRunner:
             except TimeoutError:
                 response = None
 
-            print("Response: " + response)
             if response is None:
                 if sequence.retry_count >= self.max_retries:
                     raise RuntimeError(f"Sequence failed after {self.max_retries} retries: {command}")

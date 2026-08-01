@@ -16,6 +16,10 @@ def main(args):
     DEBUG = False
     if args.debug:
         DEBUG = True
+        
+    if DEBUG: 
+        start_time = time.perf_counter()
+        tracemalloc.start()
     
     print("Initializing components...")
     board = Board()
@@ -32,11 +36,6 @@ def main(args):
     #     serial_com.connect()
     # except TypeError as e:
     #     if DEBUG: print(e)
-
-    if DEBUG: 
-        start_time = time.perf_counter()
-        tracemalloc.start()
-
 
     runner.run(Sequence([Command.wait(2500)]))
 
