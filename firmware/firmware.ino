@@ -20,14 +20,15 @@ void loop() {
 
     char* command = strtok(buf, " ");
 
-    digitalWrite(LED_BUILTIN, LOW);
-    delay(250);
-    digitalWrite(LED_BUILTIN, HIGH);
-    delay(250);
 
-    // Serial.write("DONE\n");
 
     if (strcmp(command, "PING") == 0) {
+      for (int i = 0; i < 5; i++) {
+        digitalWrite(LED_BUILTIN, LOW);
+        delay(100);
+        digitalWrite(LED_BUILTIN, HIGH);
+        delay(100);
+      }
       Serial.write(RETURN_PONG);
     }
     else if (strcmp(command, "MOVE") == 0) {
@@ -35,11 +36,11 @@ void loop() {
     }
     else if (strcmp(command, "WAIT") == 0) {
       char* var1 = strtok(NULL, " ");
-      int time = atoi(var1)
+      int time = atoi(var1);
 
-      delay(time)
+      delay(time);
       
-      Serial.write(RETURN_DONE)
+      Serial.write(RETURN_DONE);
     }
     else {
       Serial.write(RETURN_INVALID_COMMAND);

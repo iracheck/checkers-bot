@@ -1,5 +1,7 @@
-from data_structures.sequence import Sequence
+from data_structures import Sequence, Command, CommandType
 from interface.serial_interface import SerialCom
+
+ERROR_MESSAGES = ["ERROR_INVALID_COMMAND", "ERROR_BAD_ARGUMENT_COUNT", "ERROR_BAD_ARGUMENT_VALUE"]
 
 
 class SequenceRunner:
@@ -11,13 +13,14 @@ class SequenceRunner:
     def run(self, sequence: Sequence):
         '''Executes every command in a sequence, retrying failed commands up to max_retries times.'''
         while not sequence.is_complete():
-            command = sequence.get_next().to_bytes()
+            command = sequence.get_next()
+
             try:
-                response = self.serial_com.send_and_wait(str.encode(command))
+                response = self.serial_com.send_and_wait(command, command.expected_timeout(8000))
             except TimeoutError:
                 response = None
 
-            print(response)
+            print("Response: " + response)
             if response is None:
                 if sequence.retry_count >= self.max_retries:
                     raise RuntimeError(f"Sequence failed after {self.max_retries} retries: {command}")

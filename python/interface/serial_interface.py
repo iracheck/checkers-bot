@@ -2,6 +2,7 @@ import serial
 import serial.tools.list_ports
 from time import sleep, time
 from meta import SUPPORTED_DEVICES
+from data_structures.command import Command
 
 class SerialCom:
     '''SerialCom is a pyserial wrapper that helps send and recieve data from the robotic arm.'''
@@ -15,20 +16,16 @@ class SerialCom:
 
         if connect:
             self.connect()
-            self.send_and_wait("PING", 15000)
 
-    def send_command(self, command: bytes):
+    def send_command(self, command: Command):
         '''Sends a command to the connected microcontroller.'''
         if self.ser is None:
             raise RuntimeError("Tried to send a message to a serial device that does not exist!")            
         
-        self.ser.write(command + b"\n")
+        self.ser.write(command.to_bytes())
 
-    def send_and_wait(self, command: bytes, timeout = 2000):
+    def send_and_wait(self, command: Command, timeout = 2000):
         '''Sends a command (in bytes) and waits for a response back from the robot. This essentially just combines the send_command() and block_until_recieved() methods.'''
-
-        if isinstance(command, str):
-            command = str.encode(command)
 
         self.send_command(command)
         return self.block_until_recieved(timeout)
@@ -113,7 +110,7 @@ class SerialCom:
                             found_port = port
 
                             self.connect(found_port)
-                            response = self.send_and_wait("PING\n")
+                            response = self.send_and_wait(Command.ping())
                             if response == "PONG!":
                                 print("\nSuccessfully connected to " + SUPPORTED_DEVICES[supported_device])
                                 return port

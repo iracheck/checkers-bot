@@ -6,7 +6,7 @@ from game import Piece
 from game.player import HumanPlayer, AIPlayer, LLMPlayer, LLMType
 from interface import SerialCom, SequenceRunner
 from computer_vision import ComputerVision
-from data_structures.sequence import Sequence
+from data_structures.sequence import Sequence, Command
 
 # INFORMATION TEXT
 PLAYER_SELECTION_HELP = "Options: 'Human' 'AI[x]' 'Google' (E.g. AI5 is AI with difficulty 5)"
@@ -34,7 +34,7 @@ def main(args):
 
     if DEBUG: start_time = time.perf_counter()
 
-    # runner.run(Sequence(["PING", "MOVE", "C"]))
+    runner.run(Sequence([Command.wait(2500)]))
 
     return
 

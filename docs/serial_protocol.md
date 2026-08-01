@@ -59,10 +59,10 @@ Example: `PONG!`
 *Returns when a `PING` command is sent to the robot.*
 
 ### ERROR
-Example: `ERROR_[reason]`  
+Example: `ERROR_[reason]` 
   
 *Indicates an error that happened, and gives a code relating to its nature*
 **Possible reasons include**:  
-- INVALID_COMMAND  
+- INVALID_COMMAND (e.g. `ERROR_INVALID_COMMAND`)
 - BAD_ARGUMENT_COUNT  
 - BAD_ARGUMENT_VALUE 

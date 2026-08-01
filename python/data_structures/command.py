@@ -7,6 +7,11 @@ class Command:
         self.arg2 = arg2
         self.arg3 = arg3
 
+    def expected_timeout(self, base_timeout: int = 2000) -> int:
+        if self.type == CommandType.WAIT:
+            return self.arg1 + 1000
+        return base_timeout
+
     def to_bytes(self) -> bytes:
         '''Serializes this Command into the encoded format expected by the microcontroller.'''
         parts = [self.type.name]
@@ -16,7 +21,6 @@ class Command:
                 parts.append(str(arg))
 
         return " ".join(parts).encode() + b"\n"
-
 
     @classmethod
     def ping(cls) -> "Command":

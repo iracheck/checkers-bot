@@ -1,3 +1,3 @@
-from data_structures.command import Command
 from data_structures.command_type import CommandType
+from data_structures.command import Command
 from data_structures.sequence import Sequence
