@@ -11,7 +11,7 @@ class SequenceRunner:
     def run(self, sequence: Sequence):
         '''Executes every command in a sequence, retrying failed commands up to max_retries times.'''
         while not sequence.is_complete():
-            command = sequence.get_next()
+            command = sequence.get_next().to_bytes()
             try:
                 response = self.serial_com.send_and_wait(str.encode(command))
             except TimeoutError:

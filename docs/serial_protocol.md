@@ -38,13 +38,16 @@ Usage: `WAIT ms`
 **Parameters**:
  - `ms`: delay in milliseconds
 
-### MAGNET_ON
-Usage: `MAGNET_ON`
+### MAGNET
+Usage: `MAGNET state`
 *Enables the electromagnet*
 
-### MAGNET_OFF
-Usage: `MAGNET_OFF`
-*Disables the electromagnet*
+**Parameters**:
+ - `state`: the state of the electromagnet; 0 for off, 1 for on
+
+ ### PING
+ Usage: `PING`
+ *Pings the microcontroller, and returns `PONG!` if it recieves a response.*
 
 ## Responses
 ### DONE  

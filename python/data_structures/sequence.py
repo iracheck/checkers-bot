@@ -1,16 +1,17 @@
 from queue import Queue
-from data_structures import Command
+from data_structures import Command, CommandType
 from game.move import Move
 
 class Sequence:
-    def __init__(self, commands: list[str] = None):
+    def __init__(self, commands: list[Command] = None):
         if commands:
             self.commands = commands
         else:
             commands = []
-            
+
         self.completed = 0
         self.retry_count = 0
+
 
     def get_next(self) -> Command:
         '''Returns the next item in the sequence'''

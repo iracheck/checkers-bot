@@ -33,6 +33,14 @@ void loop() {
     else if (strcmp(command, "MOVE") == 0) {
       Serial.write(RETURN_DONE);
     }
+    else if (strcmp(command, "WAIT") == 0) {
+      char* var1 = strtok(NULL, " ");
+      int time = atoi(var1)
+
+      delay(time)
+      
+      Serial.write(RETURN_DONE)
+    }
     else {
       Serial.write(RETURN_INVALID_COMMAND);
     }
