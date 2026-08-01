@@ -30,7 +30,7 @@ class Command:
 
     @classmethod
     def magnet(cls, state: int) -> "Command":
-        return cls(CommandType.MAGNET, state)
+        return cls(CommandType.GRIPPER, state)
 
     @classmethod
     def move(cls, x: int, y: int, z: int) -> "Command":

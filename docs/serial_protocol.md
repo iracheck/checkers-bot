@@ -38,9 +38,9 @@ Usage: `WAIT ms`
 **Parameters**:
  - `ms`: delay in milliseconds
 
-### MAGNET
-Usage: `MAGNET state`
-*Enables the electromagnet*
+### GRIPPER
+Usage: `GRIPPER state`
+*Changes the state of the piece gripper*
 
 **Parameters**:
  - `state`: the state of the electromagnet; 0 for off, 1 for on
