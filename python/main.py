@@ -1,5 +1,6 @@
 import time
 import argparse
+import tracemalloc
 
 from game import Board
 from game import Piece
@@ -32,11 +33,12 @@ def main(args):
     # except TypeError as e:
     #     if DEBUG: print(e)
 
-    if DEBUG: start_time = time.perf_counter()
+    if DEBUG: 
+        start_time = time.perf_counter()
+        tracemalloc.start()
+
 
     runner.run(Sequence([Command.wait(2500)]))
-
-    return
 
     while running:
         turn += 1
@@ -54,7 +56,7 @@ def main(args):
             print(f"Piece ({move.origin[0]}, {move.origin[1]}) was moved to ({move.path[-1][0]}, {move.path[-1][1]}) and killed the following pieces: {move.kills}")
         else:
             print(f"Piece ({move.origin[0]}, {move.origin[1]}) was moved to ({move.path[-1][0]}, {move.path[-1][1]})")
-        print(board)
+        if DEBUG: print(board)
 
         if board.has_won(player1.color):
             print("Player 1 wins!")
@@ -64,9 +66,15 @@ def main(args):
             running = False
 
     print("Done after " + str(turn) + " turns")
+
+    
     if DEBUG: 
         end_time = time.perf_counter()
+        current, peak = tracemalloc.get_traced_memory()
+        tracemalloc.stop()
+
         print("Game took: " + str(end_time - start_time) + " seconds.")
+        print(f"Peak memory usage: {peak / 1024:.1f} KB")
 
 
 def getPlayer(arg: str, color: str):

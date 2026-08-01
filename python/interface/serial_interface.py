@@ -23,6 +23,7 @@ class SerialCom:
             raise RuntimeError("Tried to send a message to a serial device that does not exist!")            
         
         self.ser.write(command.to_bytes())
+        if self.DEBUG: print("Sent: " + command.to_bytes().decode())
 
     def send_and_wait(self, command: Command, timeout = 2000):
         '''Sends a command (in bytes) and waits for a response back from the robot. This essentially just combines the send_command() and block_until_recieved() methods.'''
@@ -54,6 +55,8 @@ class SerialCom:
         split_buf = self._read_buffer.split(b"\n", 1)
 
         self._read_buffer = split_buf[1]
+
+        if self.DEBUG: print("Recieved: " + split_buf[0].decode())
         return split_buf[0]
 
     def open(self):

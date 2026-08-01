@@ -147,7 +147,6 @@ class AIPlayer(Player):
 
         score = score_from_center + score_from_pieces + score_from_num_moves + random.uniform(-0.25, 0.25)
 
-        print(score)
         return score
 
     def opposing_color(self) -> str:
