@@ -24,16 +24,14 @@ class Command:
 
     @classmethod
     def ping(cls) -> "Command":
-        '''Builds a PING command with no arguments.'''
         return cls(CommandType.PING)
 
     @classmethod
     def home(cls) -> "Command":
-        '''Builds a HOME command with no arguments.'''
         return cls(CommandType.HOME)
 
     @classmethod
-    def magnet(cls, state: int) -> "Command":
+    def gripper(cls, state: int) -> "Command":
         return cls(CommandType.GRIPPER, state)
 
     @classmethod

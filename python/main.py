@@ -16,10 +16,9 @@ def main(args):
     DEBUG = False
     if args.debug:
         DEBUG = True
-        
+
     if DEBUG: 
         start_time = time.perf_counter()
-        tracemalloc.start()
     
     print("Initializing components...")
     board = Board()
@@ -69,11 +68,7 @@ def main(args):
     
     if DEBUG: 
         end_time = time.perf_counter()
-        current, peak = tracemalloc.get_traced_memory()
-        tracemalloc.stop()
-
         print("Game took: " + str(end_time - start_time) + " seconds.")
-        print(f"Peak memory usage: {peak / 1024:.1f} KB")
 
 
 def getPlayer(arg: str, color: str):

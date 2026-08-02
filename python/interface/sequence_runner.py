@@ -1,13 +1,15 @@
 from data_structures import Sequence, Command, CommandType
 from interface.serial_interface import SerialCom
+from kinematics import ArmKinematics
 
 ERROR_MESSAGES = ["ERROR_INVALID_COMMAND", "ERROR_BAD_ARGUMENT_COUNT", "ERROR_BAD_ARGUMENT_VALUE"]
 
 
 class SequenceRunner:
     '''A class that handles the running of sequences independently of the main file.'''
-    def __init__(self, serial_com: SerialCom, max_retries: int = 3):
+    def __init__(self, serial_com: SerialCom, kinematics: ArmKinematics, max_retries: int = 3):
         self.serial_com = serial_com
+        self.kinematics = kinematics
         self.max_retries = max_retries
 
     def run(self, sequence: Sequence):

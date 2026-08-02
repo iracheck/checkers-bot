@@ -48,12 +48,14 @@ class Sequence:
             print(f"[WARNING] This command has been retried {self.retry_count} times.\nCommand: {self.commands}")
         
         return self.retry_count
-    
-    def from_move(self, move: Move):
+
+    def is_complete(self) -> bool:
+            return self.completed >= len(self.commands)
+
+    @classmethod
+    def from_move(cls, move: Move):
         '''Creates a sequence given a move-- essentially, devises a sequence of arduino commands in order to complete each step of the move.'''
         #TODO: Implement this when the mechanical engineers finish their tasks
         # this will work by essentially using an IK-formula to find the targets of the 
-        pass
-
-    def is_complete(self) -> bool:
-        return self.completed >= len(self.commands)
+        for jump in move.path:
+            pass
