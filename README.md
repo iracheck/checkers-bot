@@ -37,18 +37,17 @@ A physical checkers-playing robot built by a team of engineers. The robot uses c
 
 ```
 checkers-bot/
-├── esp32/                   
-│   ├── interface/          # Serial communication with Python brain
-│   ├── control/            # Arm control firmware
+├── firmware/               # arduino control software-- robotic arm control
 ├── docs/                   # Documentation and serial protocol spec
 ├── hardware/               # Design files, etc.
 ├── python/
 │   ├── game/               # Board, pieces, game logic, AI
 │   ├── computer_vision/    # OpenCV board detection
 │   ├── interface/          # Serial communication with ESP32
+│   ├── tests/              # Unit tests
 │   ├── data_structures/    # Move sequences and other supporting structures
 │   └── main.py             # Entry point
-└── tests/                  # Unit tests for python
+└── requirements.txt        # Dependencies 
 ```
 
 ---
@@ -64,12 +63,14 @@ checkers-bot/
 
 ## Running the Project
 
-*Setup instructions coming closer to project completion.*
+*True setup instructions coming closer to project completion.*
 
 ```bash
 cd python
-python main.py
+python main.py [player1] [player2]
 ```
+
+Player types include: AI[depth], Google, Human<br>
 
 To run unit tests:
 
@@ -86,11 +87,11 @@ Software
 - [x] Core game engine (board, pieces)
 - [x] Move validation and legal move generation
 - [x] Minimax AI with alpha-beta pruning
-- [ ] LLM player mode (Minimax vs LLM)
-- [ ] Serial communication protocol
+- [x] LLM player mode (Minimax vs LLM)
+- [x] Serial communication protocol
 - [ ] Computer vision board detection
 - [ ] Full system integration
-- [ ] Set up GitHub Action to automate unit tests
+- [x] Set up GitHub Action to automate unit tests
 
 Documentation
 - [x] Write serial protocpl docs
