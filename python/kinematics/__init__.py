@@ -1,1 +1,1 @@
-from kinematics import ArmKinematics
+from kinematics.arm_kinematics import ArmKinematics

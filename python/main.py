@@ -31,12 +31,16 @@ def main(args):
     turn = 0
     running = True
 
+    vision.run()
+
     # try:
     #     serial_com.connect()
     # except TypeError as e:
     #     if DEBUG: print(e)
 
-    runner.run(Sequence([Command.wait(2500)]))
+    # runner.run(Sequence([Command.wait(2500)]))
+
+    return
 
     while running:
         turn += 1

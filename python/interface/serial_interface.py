@@ -122,6 +122,8 @@ class SerialCom:
         print("\n")
 
         if found_port is None:
+            if DEBUG:
+                return None
             raise RuntimeError("Could not find a connected robot.")
         
         return found_port

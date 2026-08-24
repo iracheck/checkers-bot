@@ -11,15 +11,9 @@ Examples:
 `WAIT 200`
 
 ## Commands
-### HOME
-Usage: `HOME`
-*Returns the arm to its predefined "zeroed" position-- intended to be somewhere that is out of the way of the board and camera vision.*
-**Notes**:
 
- - May or may not automatically disable magnet, depending on final implementation
-
-### MOVE_TO
-Usage: `MOVE_TO x y z`
+### MOVE
+Usage: `MOVE x y z`
 *Moves the arm to the designated `(x,y,z)` coordinate.*
 **Notes**:
 -   Coordinate meaning is defined elsewhere in the motion system.
@@ -66,3 +60,4 @@ Example: `ERROR_[reason]`
 - INVALID_COMMAND (e.g. `ERROR_INVALID_COMMAND`)
 - BAD_ARGUMENT_COUNT  
 - BAD_ARGUMENT_VALUE 
+- OUT_OF_RANGE

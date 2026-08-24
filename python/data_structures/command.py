@@ -32,12 +32,23 @@ class Command:
 
     @classmethod
     def gripper(cls, state: int) -> "Command":
+        '''Change the state of the gripper. 0 for closed, 1 for open
+        
+        var "state" is taken as a 0 or 1 (boolean)
+        '''
         return cls(CommandType.GRIPPER, state)
 
     @classmethod
     def move(cls, x: int, y: int, z: int) -> "Command":
+        '''x,y,z are given as angles to the servos on the arduino. Intended to use the IK formula, but not required'''
         return cls(CommandType.MOVE, x, y, z)
+
+    @classmethod
+    def home(cls) -> "Command":
+        return cls(CommandType.MOVE, 0, 0, 0)
 
     @classmethod
     def wait(cls, ms: int) -> "Command":
         return cls(CommandType.WAIT, ms)
+
+    
