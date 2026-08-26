@@ -23,6 +23,7 @@ def main(args):
     print("Initializing components...")
     board = Board()
     vision = ComputerVision()
+    vision.setup()
     # serial_com = SerialCom(True, DEBUG)
     # runner = SequenceRunner(serial_com)
     player1 = getPlayer(args.player1, Piece.WHITE)
