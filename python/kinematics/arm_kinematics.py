@@ -5,6 +5,5 @@ class ArmKinematics:
         self.base_height = base_height
 
     def solve(self, x: int, y: int, z: int):
-        x_out, y_out, z_out = 0
         # add future IK code here
         pass
