@@ -14,8 +14,12 @@ PLAYER_SELECTION_HELP = "Options: 'Human' 'AI[x]' 'Google' (E.g. AI5 is AI with 
 
 def main(args):
     DEBUG = False
+    RECALIBRATE = False
     if args.debug:
         DEBUG = True
+
+    if args.recalibrate:
+        RECALIBRATE = True
 
     if DEBUG: 
         start_time = time.perf_counter()
@@ -23,7 +27,7 @@ def main(args):
     print("Initializing components...")
     board = Board()
     vision = ComputerVision()
-    vision.setup()
+    vision.calibrate(RECALIBRATE)
     # serial_com = SerialCom(True, DEBUG)
     # runner = SequenceRunner(serial_com)
     player1 = getPlayer(args.player1, Piece.WHITE)
@@ -91,6 +95,7 @@ def parse_args():
     parser = argparse.ArgumentParser()
 
     parser.add_argument("--debug", "--d", action="store_true", help="Run in debug (verbose) mode. Also shows time benchmarking data")
+    parser.add_argument("--recalibrate", action="store_true", help="Rerun the calibration process for Computer Vision.")
     parser.add_argument("player1", type=str, help="The type of player 1. " + PLAYER_SELECTION_HELP)
     parser.add_argument("player2", type=str, help="The type of player 2. " + PLAYER_SELECTION_HELP)
 

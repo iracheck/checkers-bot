@@ -73,7 +73,7 @@ python main.py [player1] [player2]
 
 Player types include: AI[depth], Google, Human<br>
 
-When the program starts, if no existing calibration is saved for the camera it will ask you to recalibrate. Optionally, run `--recalibrate` in program args to change calibration.
+When the program starts, if no existing calibration is saved for the camera it will ask you to recalibrate. Optionally, run `--recalibrate` in program args to change calibration, OR delete the `calibration.json` file.
 
 When calibrating, you must start at the top left and move clockwise to select the four corners. Always select the four corners around the physical spaces for the pieces, not the physical edge of the board.
 

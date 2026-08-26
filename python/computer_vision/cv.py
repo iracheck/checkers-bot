@@ -1,5 +1,7 @@
 import cv2
 import numpy as np
+import json
+import os
 
 class ComputerVision:
     def __init__(self):
@@ -46,9 +48,27 @@ class ComputerVision:
 
         return warped
 
-    def setup(self):
-        self.corners = self.calibrate_corners()
+    # Calibration
 
+    def load_calibration(self, target):
+        '''Loads existing calibration data from json'''
+        file = open(target)
+        data = json.dump(file)
+
+    def save_calibration(self, data, target):
+        '''Saves existing calibration data to json'''
+        json.dump(data, target)
+
+    def calibrate(self, recalibrate, target="calibration.json"):
+        '''Runs the calibration process-- loads an existing calibration if it exists and recalibration is not occuring, otherwise prompts the user with a new calibration process'''
+        if not recalibrate and os.path.exists(target):
+            print("Loading existing calibration...")
+            return self.load_calibration(target)
+
+        print("Running calibration...")
+        points = self.calibrate_corners()
+        self.save_calibration(points, target)
+        return points
 
     def calibrate_corners(self):
         points = []
