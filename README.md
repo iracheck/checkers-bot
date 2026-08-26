@@ -25,7 +25,7 @@ A physical checkers-playing robot built by a team of engineers. The robot uses c
 | Game Logic & AI | Python |
 | Computer Vision | Python, OpenCV |
 | Serial Communication | Python (pyserial) |
-| Microcontroller | Arduino/ESP32 |
+| Microcontroller | Arduino/ESP32 (C/C++) |
 | Mechanical System | Custom robotic arm |
 | Camera | TBA |
 | Motors | TBA |
@@ -58,12 +58,13 @@ checkers-bot/
 |---|---|
 | Ira Check | Software Engineer |
 | Zachary Brannigan | Mechanical Engineer |
+| Connor Macalalad | Consulting |
 
 ---
 
 ## Running the Project
 
-*True setup instructions coming closer to project completion.*
+*Improved setup instructions coming upon project completion.*
 
 ```bash
 cd python
@@ -71,6 +72,10 @@ python main.py [player1] [player2]
 ```
 
 Player types include: AI[depth], Google, Human<br>
+
+When the program starts, if no existing calibration is saved for the camera it will ask you to recalibrate. Optionally, run `--recalibrate` in program args to change calibration.
+
+When calibrating, you must start at the top left and move clockwise to select the four corners. Always select the four corners around the physical spaces for the pieces, not the physical edge of the board.
 
 To run unit tests:
 
@@ -90,8 +95,14 @@ Software
 - [x] LLM player mode (Minimax vs LLM)
 - [x] Serial communication protocol
 - [ ] Computer vision board detection
+- [ ] Inverse kinematics
 - [ ] Full system integration
 - [x] Set up GitHub Action to automate unit tests
+
+Robotic Arm
+- [x] Functioning robotic arm
+- [ ] Arm firmware
+- [ ] Failure detection/redundancy
 
 Documentation
 - [x] Write serial protocpl docs
