@@ -123,19 +123,9 @@ class ComputerVision:
                 print('not self corner')
                 self.corners = self.calibrate_corners()
 
-            hsv = cv2.cvtColor(frame, cv2.COLOR_BGR2HSV)
-            flipped = cv2.flip(hsv, 1)
+            frame = cv2.flip(frame, 1)
 
-            red_mask = cv2.inRange(flipped, (0, 100, 100), (10, 255, 255))
-            black_mask = cv2.inRange(flipped, (0,0,0), (100, 255, 50))
-
-            combined_mask = cv2.bitwise_or(red_mask, black_mask)
-
-            blur = cv2.GaussianBlur(combined_mask, (9, 9), 2)
-
-            
-
-            cv2.imshow("Live Video Feed", frame)
+            cv2.imshow("Live Video Feed", self.warp_board(frame, self.corners))
 
             # Press q to quit
             if cv2.waitKey(1) & 0xFF == ord('q'):
