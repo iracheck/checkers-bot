@@ -53,22 +53,24 @@ class ComputerVision:
     def load_calibration(self, target):
         '''Loads existing calibration data from json'''
         file = open(target)
-        data = json.dump(file)
+        data = json.load(file)
+        return data
 
     def save_calibration(self, data, target):
-        '''Saves existing calibration data to json'''
-        json.dump(data, target)
+        '''Saves existing calibration data to json''' 
+        file = open(target, "w")
+        json.dump(data, file)
 
     def calibrate(self, recalibrate, target="calibration.json"):
         '''Runs the calibration process-- loads an existing calibration if it exists and recalibration is not occuring, otherwise prompts the user with a new calibration process'''
         if not recalibrate and os.path.exists(target):
             print("Loading existing calibration...")
-            return self.load_calibration(target)
+            self.corners = self.load_calibration(target)
+            return
 
         print("Running calibration...")
-        points = self.calibrate_corners()
-        self.save_calibration(points, target)
-        return points
+        self.corners = self.calibrate_corners()
+        self.save_calibration(self.corners, target)
 
     def calibrate_corners(self):
         points = []
@@ -116,8 +118,10 @@ class ComputerVision:
             if not ret:
                 print("Failed to capture frame")
                 break
-
-            self.calibrate_corners()
+            
+            if not self.corners:
+                print('not self corner')
+                self.corners = self.calibrate_corners()
 
             hsv = cv2.cvtColor(frame, cv2.COLOR_BGR2HSV)
             flipped = cv2.flip(hsv, 1)
