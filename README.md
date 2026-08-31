@@ -54,10 +54,10 @@ checkers-bot/
 
 ## Team
 
-| Name | Role |
-|---|---|
-| Ira Check | Software Engineer |
-| Zachary Brannigan | Mechanical Engineer |
+| Name | Role | LinkedIn | GitHub |
+|---|---| --- | --- |
+| Ira Check | Software Engineer | [linkedin.com/in/iracheck](https://www.linkedin.com/in/iracheck/) | [github.com/iracheck](https://github.com/iracheck) | 
+| Zachary Brannigan | Mechanical Engineer | [linkedin.com/in/zachary-brannigan](https://www.linkedin.com/in/zachary-brannigan/) | n/a |
 
 ---
 
