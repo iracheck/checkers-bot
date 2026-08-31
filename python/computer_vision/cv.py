@@ -3,7 +3,7 @@ import numpy as np
 import json
 import os
 
-from python.game import Board, Piece
+from game import Board, Piece
 
 class ComputerVision:
     def __init__(self):
@@ -24,14 +24,14 @@ class ComputerVision:
 
     def load_calibration(self, target):
         '''Loads existing calibration data from json located at `target`'''
-        file = open(target)
-        data = json.load(file)
+        with open(target, "r") as file:
+            data = json.load(file)
         return data
 
     def save_calibration(self, data, target):
         '''Saves existing calibration `data` to json file located at `target`''' 
-        file = open(target, "w")
-        json.dump(data, file)
+        with open(target, "w") as file:
+            json.dump(data, file)
 
     def calibrate(self, recalibrate, target="calibration.json"):
         '''Runs the calibration process-- loads an existing calibration if it exists and recalibration is not occuring, otherwise prompts the user with a new calibration process.
@@ -142,7 +142,7 @@ class ComputerVision:
                 
 
 
-    def sample_color_in_region(self, frame, x1: int, y1: int, x2: int, y2: int, padding=0):
+    def sample_color_in_region(self, frame, x1: int, y1: int, x2: int, y2: int):
         '''Gets the average of the colors located in a given region.
         
         `frame` represents the image to be sampled.

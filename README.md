@@ -22,7 +22,7 @@ A physical checkers-playing robot built by a team of engineers. The robot uses c
 
 | Layer | Technology |
 |---|---|
-| Game Logic & AI | Python |
+| Game Logic & AI | Python 3.11 |
 | Computer Vision | Python, OpenCV |
 | Serial Communication | Python (pyserial) |
 | Microcontroller | Arduino/ESP32 (C/C++) |
@@ -58,25 +58,65 @@ checkers-bot/
 |---|---|
 | Ira Check | Software Engineer |
 | Zachary Brannigan | Mechanical Engineer |
-| Connor Macalalad | Consulting |
 
 ---
 
 ## Running the Project
-
-*Improved setup instructions coming upon project completion.*
-
+Before running the project, ensure you have all dependencies installed:
 ```bash
-cd python
-python main.py [player1] [player2]
+pip install -r requirements.txt
 ```
 
-Player types include: AI[depth], Google, Human<br>
+Then change directory into `/python/`
+```bash
+cd python
+```
 
-When the program starts, if no existing calibration is saved for the camera it will ask you to recalibrate. Optionally, run `--recalibrate` in program args to change calibration, OR delete the `calibration.json` file.
+The usage to run the program is as follows:
+```bash
+python main.py [player1] [player2] --r --d
+```
 
-When calibrating, you must start at the top left and move clockwise to select the four corners. Always select the four corners around the physical spaces for the pieces, not the physical edge of the board.
+`player`: The PlayerType that is occupying that slot. Player1 is WHITE and Player2 is BLACK. WHITE player goes first.
+Valid args: 
+- ai[`depth`] e.g. ai5, ai3 -- *depth is an integer which represents the search depth for minimax. Higher values will take longer but result in a generally more intelligent opponent.*
+- human
+- google
 
+`--debug` (`--d`): Runs the program in debug (verbose) mode
+
+`--recalibrate` (`--r`): Reruns the recalibration process, overwriting the existing calibration.
+
+### Examples
+
+```bash
+python main.py ai3 ai3 --r
+```
+*Runs an evenly matched, fully automated game after running the calibration process.*
+
+```bash
+python main.py ai3 human
+```
+*Plays a human vs AI game on difficulty level 3 on an existing calibrated board (or calibrates one, if one is not already calibrated)*
+
+```bash
+python main.py gemini ai1 --d --r
+```
+*Plays a game having Gemini LLM face against an easy ai in verbose mode.*
+
+### LLM Setup
+To play against an LLM, you must have a valid API key for that LLM. These will be placed within a `.env` file that you must create yourself. You can paste the text below in as a template:
+```env
+GEMINI_API_KEY=[PASTE_API_KEY_HERE]
+```
+
+### Calibration
+
+When the program starts, if no existing calibration is saved for the camera it will ask you to recalibrate. Optionally, run `--recalibrate` (`--r`) in program args OR delete the `calibration.json` file, to rerun the calibration process.
+
+**INSTRUCTIONS**: When calibrating, you must start at the top left and move clockwise to select the four corners. Always select the four corners around the physical spaces for the pieces, not the physical edge of the board. After doing this, you will recieve a preview. Ensure that it is atleast mostly aligned (a few pixels off is okay), and if it is not, press 'r' to try again.
+
+### Unit Tests
 To run unit tests:
 
 ```bash

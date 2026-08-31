@@ -10,7 +10,7 @@ from computer_vision import ComputerVision
 from data_structures.sequence import Sequence, Command
 
 # INFORMATION TEXT
-PLAYER_SELECTION_HELP = "Options: 'Human' 'AI[x]' 'Google' (E.g. AI5 is AI with difficulty 5)"
+PLAYER_SELECTION_HELP = "Options: 'human' 'ai[x]' 'gemini' (E.g. AI5 is AI with difficulty 5)"
 
 def main(args):
     DEBUG = False
@@ -81,6 +81,7 @@ def main(args):
 
 
 def getPlayer(arg: str, color: str):
+    arg = arg.lower()
     if arg[0:2] == "ai":
         return AIPlayer(int(arg[2]), color)
     elif arg == "Gemini":
