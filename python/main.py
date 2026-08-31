@@ -1,6 +1,5 @@
 import time
 import argparse
-import tracemalloc
 
 from game import Board
 from game import Piece
@@ -45,7 +44,6 @@ def main(args):
 
     # runner.run(Sequence([Command.wait(2500)]))
 
-    return
 
     while running:
         turn += 1
@@ -84,9 +82,9 @@ def getPlayer(arg: str, color: str):
     arg = arg.lower()
     if arg[0:2] == "ai":
         return AIPlayer(int(arg[2]), color)
-    elif arg == "Gemini":
+    elif arg == "gemini":
         return LLMPlayer(LLMType.GOOGLE, color)
-    elif arg == "Human":
+    elif arg == "human":
         return HumanPlayer(color)
     else:
         print("Player for color " + color + " is of an invalid type. " + PLAYER_SELECTION_HELP)

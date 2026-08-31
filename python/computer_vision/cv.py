@@ -81,9 +81,10 @@ class ComputerVision:
         # Draw preview of squares
         for square in self.squares:
             loc = self.squares.get(square)
-            cv2.circle(warped, (loc[0], loc[1]), 10, 1)
-            cv2.circle(warped, (loc[2], loc[3]), 5, 1)
+            cv2.line(warped, (loc[0], loc[1]), (loc[0], loc[3]), (0, 0, 0), 1)
+            cv2.line(warped, (loc[0], loc[1]), (loc[2], loc[1]), (0, 0, 0), 1)
         cv2.imshow("Preview - press 'r' to redo, any other key to accept", warped)
+
         key = cv2.waitKey(0)
         cv2.destroyAllWindows()
 
