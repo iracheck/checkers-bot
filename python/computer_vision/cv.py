@@ -14,8 +14,8 @@ class ComputerVision:
         self.output_size = 800
         self.dimensions = 8
 
-        self.cap.set(cv2.CAP_PROP_FRAME_WIDTH, 1920)
-        self.cap.set(cv2.CAP_PROP_FRAME_HEIGHT, 1080)
+        self.cap.set(cv2.CAP_PROP_FRAME_WIDTH, 800)
+        self.cap.set(cv2.CAP_PROP_FRAME_HEIGHT, 800)
 
         if not self.cap.isOpened():
             raise Exception("Failed to open camera!")
@@ -142,7 +142,6 @@ class ComputerVision:
                 color = self.sample_color_in_region(frame, dimensions[0], dimensions[1], dimensions[2], dimensions[3])
                 
 
-
     def sample_color_in_region(self, frame, x1: int, y1: int, x2: int, y2: int):
         '''Gets the average of the colors located in a given region.
         
@@ -167,9 +166,7 @@ class ComputerVision:
             if not self.corners:
                 print('not self corner')
                 self.corners = self.calibrate_corners()
-
-            frame = cv2.flip(frame, 1)
-
+                
             # for s in self.squares.values():
             #     color = self.sample_color_in_region(frame, s[0], s[1], s[2], s[3])
             #     cv2.putText(frame, str(color), (s[0],s[1]), cv2.FONT_HERSHEY_COMPLEX, 0.25, 0.1, 1)
