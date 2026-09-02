@@ -5,7 +5,7 @@ from game import Board
 from game import Piece
 from game.player import HumanPlayer, AIPlayer, LLMPlayer, LLMType
 from interface import SerialCom, SequenceRunner
-from computer_vision import ComputerVision
+from computer_vision import ComputerVision, BoardGenerator
 from data_structures.sequence import Sequence, Command
 
 # INFORMATION TEXT
@@ -23,26 +23,30 @@ def main(args):
     if DEBUG: 
         start_time = time.perf_counter()
     
-    print("Initializing components...")
+    print("Initializing components...", end="")
     board = Board()
     vision = ComputerVision()
-    vision.calibrate(RECALIBRATE)
+    boardgen = BoardGenerator(vision, 8)
     # serial_com = SerialCom(True, DEBUG)
     # runner = SequenceRunner(serial_com)
     player1 = getPlayer(args.player1, Piece.WHITE)
     player2 = getPlayer(args.player2, Piece.BLACK)
+    print("DONE.")
+
+    vision.calibrate(RECALIBRATE)
+    print(vision.squares)
+    print(vision.corners)
+    boardgen.get()
 
     turn = 0
     running = True
 
-    vision.run()
+    vision.run_video()
 
     # try:
     #     serial_com.connect()
     # except TypeError as e:
     #     if DEBUG: print(e)
-
-    # runner.run(Sequence([Command.wait(2500)]))
 
 
     while running:

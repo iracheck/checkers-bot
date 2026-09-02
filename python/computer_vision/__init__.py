@@ -1,1 +1,2 @@
 from computer_vision.cv import ComputerVision
+from computer_vision.board_generation import BoardGenerator

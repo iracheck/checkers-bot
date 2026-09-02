@@ -75,15 +75,9 @@ class ComputerVision:
                 cv2.waitKey(1)
             cv2.destroyAllWindows()
 
-        ret, frame = self.cap.read()
-        warped = self.warp_board(frame, points)
+        preview = self.get_frame(points)
 
-        # Draw preview of squares
-        for square in self.squares:
-            loc = self.squares.get(square)
-            cv2.line(warped, (loc[0], loc[1]), (loc[0], loc[3]), (0, 0, 0), 1)
-            cv2.line(warped, (loc[0], loc[1]), (loc[2], loc[1]), (0, 0, 0), 1)
-        cv2.imshow("Preview - press 'r' to redo, any other key to accept", warped)
+        cv2.imshow("Preview - press 'r' to redo, any other key to accept", preview)
 
         key = cv2.waitKey(0)
         cv2.destroyAllWindows()
@@ -114,6 +108,8 @@ class ComputerVision:
 
     def warp_board(self, frame, corners):
         """
+        Flattens the board into something that can be safely converted into a Board obj.
+
         frame: the frame to be warped
 
         corners: list of 4 (x,y) points in the RAW frame, in order:
@@ -133,29 +129,27 @@ class ComputerVision:
 
         return warped
 
-    # Board generation
-    def generate_board_from_image(self, frame) -> Board:
+    def get_frame(self, c=None):
+        '''Reads the camera, and then returns the processed frame with the given corners. Defaults to the '''
+        ret, frame = self.cap.read()
 
-        for i in range(0, self.dimensions):
-            for j in range(0, self.dimensions):
-                dimensions = self.squares[(i,j)]
-                color = self.sample_color_in_region(frame, dimensions[0], dimensions[1], dimensions[2], dimensions[3])
-                
+        if c is None:
+            if self.corners is None:
+                raise RuntimeError("Tried to get a frame, but the corners are not currently defined!")
+            c = self.corners
 
-    def sample_color_in_region(self, frame, x1: int, y1: int, x2: int, y2: int):
-        '''Gets the average of the colors located in a given region.
-        
-        `frame` represents the image to be sampled.
+        return self.warp_board(frame, c)
 
-        `x1,x2,y1,y2` represent the bounds of which are sampled'''
-        region = frame[y1:y2, x1:x2]
 
-        average_color = np.mean(region, axis=(0, 1))
+    # Debug
 
-        return average_color
+    def draw_squares(self, target):
+        for square in self.squares:
+            loc = self.squares.get(square)
+            cv2.line(target, (loc[0], loc[1]), (loc[0], loc[3]), (0, 0, 0), 1)
+            cv2.line(target, (loc[0], loc[1]), (loc[2], loc[1]), (0, 0, 0), 1)
 
-    # temp method for testing
-    def run(self):
+    def run_video(self):
         while True:
             ret, frame = self.cap.read()
 
