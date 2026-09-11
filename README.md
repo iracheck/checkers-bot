@@ -79,7 +79,7 @@ python main.py [player1] [player2] --r --d
 
 `player`: The PlayerType that is occupying that slot. Player1 is WHITE and Player2 is BLACK. WHITE player goes first.
 Valid args: 
-- ai[`depth`] e.g. ai5, ai3 -- *depth is an integer which represents the search depth for minimax. Higher values will take longer but result in a generally more intelligent opponent.*
+- ai[`depth`] e.g. ai5, ai3 -- *depth is an integer which represents the search depth for minimax (how far it "looks ahead"). Higher values will take longer but result in a generally more intelligent opponent.*
 - human
 - google
 
@@ -102,10 +102,10 @@ python main.py ai3 human
 ```bash
 python main.py gemini ai1 --d --r
 ```
-*Plays a game having Gemini LLM face against an easy ai in verbose mode.*
+*Plays a game having Gemini LLM face against an easy ai in verbose mode, after recalibrating.*
 
 ### LLM Setup
-To play against an LLM, you must have a valid API key for that LLM. These will be placed within a `.env` file that you must create yourself. You can paste the text below in as a template:
+To play against an LLM, you must have a valid API key for that LLM. These will be placed within a `.env` file that you must create yourself. You can paste the text below in as a template, and replace the placeholders with valid keys.
 ```env
 GEMINI_API_KEY=[PASTE_API_KEY_HERE]
 ```
