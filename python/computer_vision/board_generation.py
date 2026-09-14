@@ -33,8 +33,11 @@ class BoardGenerator():
                     board.matrix[i][j] = Piece(color)
 
     def is_board_valid(self, new_board: Board, old_board: Board, color_of_moving_player: str):
-        old_board.get_every_legal(color_of_moving_player)
+        moves = old_board.get_every_legal(color_of_moving_player)
 
+        for move in moves:
+            temp_board = old_board.copy()
+            
         
 
     # Color Getting

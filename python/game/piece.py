@@ -9,6 +9,9 @@ class Piece:
     def promote(self):
         self.is_king = True
 
+    def copy(self) -> "Piece":
+        return Piece(self.color, self.is_king)
+
     def __str__(self):
         return f"{'K' if self.is_king else 'P'}({self.color})"
 
@@ -17,3 +20,5 @@ class Piece:
             return NotImplemented
 
         return self.color == other.color and self.is_king == other.is_king
+
+    

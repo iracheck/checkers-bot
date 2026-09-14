@@ -8,7 +8,8 @@ class Board:
         '''Creates a new board object. If setup is True, it will populate the board with the default setup of a Checkers board.'''
         self.matrix = [[None for _ in range(8)] for _ in range(8)]
         
-        if setup: self.setup()
+        if setup: 
+            self.setup()
         
     # board state
     def setup(self):
@@ -46,6 +47,7 @@ class Board:
     # board-piece interaction
     
     def move(self, move: Move) -> bool:
+        '''Executes a `Move` object.'''
         moved_piece = self.get(move.origin[0], move.origin[1])
         if not moved_piece:
             return False
@@ -235,12 +237,25 @@ class Board:
         "Returns True if a space is off the board"
         return x > 7 or x < 0 or y > 7 or y < 0
 
-    def equals(self, other: "Board"):
+    def equals(self, other: "Board") -> bool:
         for i in range(0, 8):
             for j in range(0, 8):
                 if not self.matrix[i][j] == other.matrix[i][j]:
                     return False
         return True
+
+    def copy(self) -> "Board":
+        copied = Board(False)
+        for i in range(0, 8):
+            for j in range(0, 8):
+                piece = self.get(i, j)
+                if piece == None:
+                    continue
+
+                copied.set(i,j, piece.copy())
+
+        return copied
+                
     
     # overrides    
     def __str__(self):

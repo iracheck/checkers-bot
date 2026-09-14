@@ -27,10 +27,9 @@ class AIPlayer(Player):
         beta = float('inf')
 
 
-        #TODO: Implement a better copy method for faster minimax
         for move in flat_moves:
 
-            sim_board = copy.deepcopy(board)
+            sim_board = board.copy()
 
             # move the result, and consider the scenario in which the result is not valid
             result = sim_board.move(move)
@@ -67,7 +66,7 @@ class AIPlayer(Player):
         if is_maximizing:
             best = float('-inf')
             for move in flat_moves:
-                sim_board = copy.deepcopy(board)
+                sim_board = board.copy()
                 sim_board.move(move)
                 score = self.minimax(sim_board, depth - 1, False, alpha, beta)
                 best = max(best, score)
@@ -79,7 +78,7 @@ class AIPlayer(Player):
         else:
             best = float('inf')
             for move in flat_moves:
-                sim_board = copy.deepcopy(board)
+                sim_board = board.copy()
                 sim_board.move(move)
                 score = self.minimax(sim_board, depth - 1, True, alpha, beta)
                 best = min(best, score)

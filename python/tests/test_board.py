@@ -191,3 +191,16 @@ def test_piece_eq():
     assert p1 != p3
     assert p2 == p4
 
+def test_board_copy_simple():
+    board1 = Board()
+    board2 = board1.copy()
+
+    assert board1.equals(board2)
+
+def test_board_copy_after_move():
+    board1 = Board()
+    board1.set(0,1, None)
+
+    board2 = board1.copy()
+
+    assert board2.equals(board1)
