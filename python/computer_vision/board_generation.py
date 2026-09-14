@@ -23,11 +23,19 @@ class BoardGenerator():
         `frame`: the frame to convert into a board
         `display`: debug tool to see output visualized'''
 
+        board = Board(setup=False)
+
         for i in range(0, self.dimensions):
             for j in range(0, self.dimensions):
                 sqr = self.cv.squares[(i,j)]
                 color = self.sample_color_in_region(frame, sqr[0], sqr[1], sqr[2], sqr[3])
-                print(color)
+                if color:
+                    board.matrix[i][j] = Piece(color)
+
+    def is_board_valid(self, new_board: Board, old_board: Board, color_of_moving_player: str):
+        old_board.get_every_legal(color_of_moving_player)
+
+        
 
     # Color Getting
     
@@ -44,35 +52,24 @@ class BoardGenerator():
             return self.classify_color(average_color)
     
     @staticmethod
-    def classify_color(bgr_color) -> str:
+    def classify_color(bgr_color) -> str | None:
             '''Converts a sampled BGR color into a human-readable color name.
             
             `bgr_color`: an array-like [B, G, R], e.g. from np.mean(region, axis=(0,1))
+
+            Returns a color as defined in Piece (Piece.WHITE `"W"` or Piece.BLACK `"B"`)
             '''
             # Reshape to a 1x1 pixel "image" so cv2 can convert it
             bgr_pixel = np.uint8([[bgr_color]])
             hsv_pixel = cv2.cvtColor(bgr_pixel, cv2.COLOR_BGR2HSV)[0][0]
             h, s, v = int(hsv_pixel[0]), int(hsv_pixel[1]), int(hsv_pixel[2])
     
-            # Low saturation + high value = white/light square or piece
+            # Low saturation + high value = white
             if s < 40 and v > 150:
-                return "WHITE"
+                return Piece.WHITE
     
-            # Low saturation + low value = black square or piece
+            # Low saturation + low value = black
             if v < 60:
-                return "BLACK"
-    
-            if h < 10 or h > 170:
-                return "RED"
-            elif 10 <= h < 25:
-                return "ORANGE"
-            elif 25 <= h < 35:
-                return "YELLOW"
-            elif 35 <= h < 85:
-                return "GREEN"
-            elif 85 <= h < 130:
-                return "BLUE"
-            elif 130 <= h < 170:
-                return "PURPLE"
-    
-            return "UNKNOWN"
+                return Piece.BLACK
+            
+            return None

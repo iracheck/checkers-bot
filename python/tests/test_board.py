@@ -164,3 +164,30 @@ def test_has_won_from_blockade():
 
     assert board.has_won(Piece.WHITE) == False
     assert board.has_won(Piece.BLACK) == True
+
+
+def test_eq_true():
+    board1 = Board()
+    board2 = Board()
+
+    assert board1.equals(board2)
+
+def test_eq_false():
+    board1 = Board()
+    board2 = Board()
+
+    board2.set(0, 1, None)
+
+    assert board1.equals(board2) == False
+
+def test_piece_eq():
+    p1 = Piece(Piece.BLACK, True)
+    p2 = Piece(Piece.BLACK, False)
+    p3 = Piece(Piece.WHITE, True)
+    p4 = Piece(Piece.BLACK)
+
+    assert p1 != p2
+    assert p2 != p3
+    assert p1 != p3
+    assert p2 == p4
+
