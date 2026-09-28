@@ -283,7 +283,7 @@ class Board:
                     if new_piece is None and old_piece is not None:
                         diff.destroyed.append((row, col))
                     elif new_piece is not None and old_piece is None:
-                        diff.new.append((row, col))
+                        diff.created.append((row, col))
                     else:
                         diff.invalid.append((row, col))
 

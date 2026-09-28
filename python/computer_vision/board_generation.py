@@ -18,7 +18,7 @@ class BoardGenerator():
         frame = self.cv.get_frame()
         return self.get_from(frame)
         
-    def get_from(self, frame, current_board: Board, last_move: Move):
+    def get_from(self, frame, current_board: Board, moving_player: str):
         '''
         Creates a board given a specific frame (image) as input, and then verify it
         
@@ -35,15 +35,23 @@ class BoardGenerator():
 
                 # Use camera input to get pieces, and use known values from previous board to deduce if its a king or not
                 color = self.sample_color_in_region(frame, sqr[0], sqr[1], sqr[2], sqr[3])
-                if color:
-                    new_board.set(i, j, old_piece.is_king)
 
+                if old_piece is not None and old_piece.color == color:
+                    new_board.set(i, j, Piece(color, old_piece.is_king))
+                else:
+                    new_board.set(i, j, Piece(color, False))
+
+        # Determine what changed between the previous board and the camera generated board.
         diff = new_board.get_diff(current_board)
 
-        # then compare it with the diff, to: a) verify it is possible, b) if any kings moved, to ensure that those states remain
-        if not diff.is_same:
-            pass
-             
+        if diff.is_same:
+            return None
+
+        if not self.is_board_valid(new_board, current_board, moving_player):
+             return None
+
+        return new_board
+                        
                 
 
     def is_board_valid(self, new_board: Board, old_board: Board, color_of_moving_player: str) -> "Move":

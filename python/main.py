@@ -25,23 +25,18 @@ def main(args):
     
     print("Initializing components...", end="")
     board = Board()
-    vision = ComputerVision()
-    boardgen = BoardGenerator(vision, 8)
+    # vision = ComputerVision()
+    # boardgen = BoardGenerator(vision, 8)
     # serial_com = SerialCom(True, DEBUG)
     # runner = SequenceRunner(serial_com)
     player1 = getPlayer(args.player1, Piece.WHITE)
     player2 = getPlayer(args.player2, Piece.BLACK)
     print("DONE.")
 
-    vision.calibrate(RECALIBRATE)
-    print(vision.squares)
-    print(vision.corners)
-    boardgen.get()
-
     turn = 0
     running = True
 
-    vision.run_video()
+    # vision.run_video()
 
     # try:
     #     serial_com.connect()
