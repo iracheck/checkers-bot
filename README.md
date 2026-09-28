@@ -79,9 +79,10 @@ python main.py [player1] [player2] --r --d
 
 `player`: The PlayerType that is occupying that slot. Player1 is WHITE and Player2 is BLACK. WHITE player goes first.
 Valid args: 
-- ai[`depth`] e.g. ai5, ai3 -- *depth is an integer which represents the search depth for minimax (how far it "looks ahead"). Higher values will take longer but result in a generally more intelligent opponent.*
-- human
-- google
+- ai[`depth`] e.g. ai5, ai3 -- *Non-LLM AI that uses Minimax. depth is an integer which represents the search depth for minimax (how far it "looks ahead"). Higher values will take longer but result in a generally more intelligent opponent.*
+- human -- *human playing on physical board*
+- gemini -- **requires API key and internet connection**. *play against google's Gemini LLM*
+- terminal -- *human playing in terminal*
 
 `--debug` (`--d`): Runs the program in debug (verbose) mode
 
