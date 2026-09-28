@@ -42,6 +42,7 @@ class BoardGenerator():
 
         # then compare it with the diff, to: a) verify it is possible, b) if any kings moved, to ensure that those states remain
         if not diff.is_same:
+            pass
              
                 
 

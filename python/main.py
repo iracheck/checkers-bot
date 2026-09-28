@@ -3,13 +3,13 @@ import argparse
 
 from game import Board
 from game import Piece
-from game.player import HumanPlayer, AIPlayer, LLMPlayer, LLMType
+from game.player import HumanPlayer, AIPlayer, TerminalPlayer, LLMPlayer, LLMType
 from interface import SerialCom, SequenceRunner
 from computer_vision import ComputerVision, BoardGenerator
 from data_structures.sequence import Sequence, Command
 
 # INFORMATION TEXT
-PLAYER_SELECTION_HELP = "Options: 'human' 'ai[x]' 'gemini' (E.g. AI5 is AI with difficulty 5)"
+PLAYER_SELECTION_HELP = "Options: 'human' 'ai[x]' 'gemini' 'terminal' (E.g. AI5 is AI with difficulty 5)"
 
 def main(args):
     DEBUG = False
@@ -90,6 +90,8 @@ def getPlayer(arg: str, color: str):
         return LLMPlayer(LLMType.GOOGLE, color)
     elif arg == "human":
         return HumanPlayer(color)
+    elif arg == "terminal":
+        return TerminalPlayer(color)
     else:
         print("Player for color " + color + " is of an invalid type. " + PLAYER_SELECTION_HELP)
 
