@@ -3,12 +3,13 @@ import numpy as np
 import cv2
 
 from computer_vision import ComputerVision
-from game import Board, Piece
+from game import Board, Piece, Move
 
 class BoardGenerator():
-    def __init__(self, cv: ComputerVision, dimensions=8):
+    def __init__(self, cv: ComputerVision, dimensions=8, debug=False):
         self.cv = cv
         self.dimensions = dimensions
+        self.DEBUG = debug
 
     def get(self, display=False):
         '''Gets a board from the current camera input.
@@ -17,27 +18,42 @@ class BoardGenerator():
         frame = self.cv.get_frame()
         return self.get_from(frame)
         
-    def get_from(self, frame, display=False):
-        '''Creates a board given a specific frame (image) as input
+    def get_from(self, frame, current_board: Board, last_move: Move):
+        '''
+        Creates a board given a specific frame (image) as input, and then verify it
         
-        `frame`: the frame to convert into a board
-        `display`: debug tool to see output visualized'''
+        `frame`: the frame to convert into a board\n
+        `current_board`: the board that is currently registered as the "current board," aka the board that was generated following the previous move
+        '''
 
-        board = Board(setup=False)
+        new_board = Board(setup=False)
 
         for i in range(0, self.dimensions):
             for j in range(0, self.dimensions):
                 sqr = self.cv.squares[(i,j)]
+                old_piece = current_board.get(i, j)
+
+                # Use camera input to get pieces, and use known values from previous board to deduce if its a king or not
                 color = self.sample_color_in_region(frame, sqr[0], sqr[1], sqr[2], sqr[3])
                 if color:
-                    board.matrix[i][j] = Piece(color)
+                    new_board.set(i, j, old_piece.is_king)
 
-    def is_board_valid(self, new_board: Board, old_board: Board, color_of_moving_player: str):
+        diff = new_board.get_diff(current_board)
+
+        # then compare it with the diff, to: a) verify it is possible, b) if any kings moved, to ensure that those states remain
+        if not diff.is_same:
+             
+                
+
+    def is_board_valid(self, new_board: Board, old_board: Board, color_of_moving_player: str) -> "Move":
         moves = old_board.get_every_legal(color_of_moving_player)
 
         for move in moves:
             temp_board = old_board.copy()
-            
+            temp_board.move(move)
+
+            if temp_board.equals(new_board):
+                return move
         
 
     # Color Getting
@@ -56,7 +72,7 @@ class BoardGenerator():
     
     @staticmethod
     def classify_color(bgr_color) -> str | None:
-            '''Converts a sampled BGR color into a human-readable color name.
+            '''Converts a sampled BGR color into an english color name.
             
             `bgr_color`: an array-like [B, G, R], e.g. from np.mean(region, axis=(0,1))
 

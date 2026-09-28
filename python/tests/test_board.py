@@ -204,3 +204,16 @@ def test_board_copy_after_move():
     board2 = board1.copy()
 
     assert board2.equals(board1)
+
+def test_diff():
+    board1 = Board()
+    board2 = Board()
+
+    board1.set(0, 1, None)
+
+    diff = board1.get_diff(board2)
+
+    print(diff)
+
+    assert diff.is_same == False
+    assert len(diff.destroyed) == 1
